@@ -1,0 +1,51 @@
+---
+// ProductCategories.astro — the two primary product categories.
+// Descriptions are intentionally generic; no technical specifications
+// are invented here.
+const categories = [
+  {
+    title: 'Aluminium Doors',
+    description:
+      'Hinged, sliding and stacking aluminium door options designed to suit a range of home styles and openings.',
+    image: '/images/placeholders/category-doors.svg',
+    alt: 'Aluminium framed double door (placeholder image)',
+    href: '/aluminium-doors/',
+  },
+  {
+    title: 'Aluminium Windows',
+    description:
+      'A range of aluminium window styles built to bring in natural light while complementing your home’s design.',
+    image: '/images/placeholders/category-windows.svg',
+    alt: 'Aluminium framed sliding window (placeholder image)',
+    href: '/aluminium-windows/',
+  },
+];
+---
+
+<section id="products" class="section section--alt product-categories">
+  <div class="container">
+    <div class="section-heading section-heading--center">
+      <p class="section-eyebrow">What We Offer</p>
+      <h2 class="section-title">Product Categories</h2>
+    </div>
+
+    <div class="product-categories__grid">
+      {categories.map((category) => (
+        <article class="card card--interactive product-card">
+          <img
+            src={category.image}
+            alt={category.alt}
+            width="900"
+            height="700"
+            loading="lazy"
+            decoding="async"
+            class="product-card__image"
+          />
+          <h3>{category.title}</h3>
+          <p>{category.description}</p>
+          <a href={category.href} class="btn btn-outline">View Products</a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

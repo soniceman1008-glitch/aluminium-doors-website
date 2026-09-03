@@ -1,0 +1,58 @@
+---
+// WhyChooseUs.astro — generic, non-quantified benefit statements.
+// Deliberately avoids specific claims (years in business, rankings,
+// certifications) until real business information is supplied.
+const benefits = [
+  {
+    title: 'Contemporary Design',
+    description: 'Clean, modern profiles that suit a wide range of home styles.',
+    icon: 'M4 20 L4 4 L20 4 M4 12 L20 12 M12 4 L12 20',
+  },
+  {
+    title: 'Quality Materials',
+    description: 'Aluminium systems chosen for durability and everyday performance.',
+    icon: 'M12 3 L21 8 L21 16 L12 21 L3 16 L3 8 Z M3 8 L12 13 L21 8 M12 13 L12 21',
+  },
+  {
+    title: 'Custom Options',
+    description: 'Configurations that can be tailored to your project’s requirements.',
+    icon: 'M4 6 H20 M4 12 H14 M4 18 H20 M17 9 L20 12 L17 15',
+  },
+  {
+    title: 'Professional Service',
+    description: 'Clear communication from initial enquiry through to completion.',
+    icon: 'M20 21 C20 17 16.4 14 12 14 C7.6 14 4 17 4 21 M12 11 A4 4 0 1 0 12 3 A4 4 0 0 0 12 11 Z',
+  },
+  {
+    title: 'Built for Everyday Living',
+    description: 'Doors and windows designed to work reliably day to day.',
+    icon: 'M4 11 L12 4 L20 11 M6 10 V20 H18 V10',
+  },
+  {
+    title: 'Customer-Focused Approach',
+    description: 'Your project, your requirements — guided every step of the way.',
+    icon: 'M21 11.5 C21 16.2 12 21 12 21 C12 21 3 16.2 3 11.5 C3 7.9 6 6 8.5 6 C10 6 11.3 6.8 12 8 C12.7 6.8 14 6 15.5 6 C18 6 21 7.9 21 11.5 Z',
+  },
+];
+---
+
+<section class="section why-choose-us">
+  <div class="container">
+    <div class="section-heading section-heading--center">
+      <p class="section-eyebrow">Why Choose Us</p>
+      <h2 class="section-title">Built Around Quality &amp; Service</h2>
+    </div>
+
+    <div class="card-grid why-choose-us__grid">
+      {benefits.map((benefit) => (
+        <div class="card why-choose-us__card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d={benefit.icon} />
+          </svg>
+          <h3>{benefit.title}</h3>
+          <p>{benefit.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

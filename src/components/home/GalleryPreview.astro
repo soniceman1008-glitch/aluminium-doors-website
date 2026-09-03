@@ -1,0 +1,39 @@
+---
+// GalleryPreview.astro — featured projects preview using abstract
+// placeholder tiles. No competitor or stock images are used, and no
+// specific project details (client, location) are invented.
+const tiles = [
+  { image: '/images/placeholders/gallery-1.svg', alt: 'Featured project preview (placeholder image)' },
+  { image: '/images/placeholders/gallery-2.svg', alt: 'Featured project preview (placeholder image)' },
+  { image: '/images/placeholders/gallery-3.svg', alt: 'Featured project preview (placeholder image)' },
+  { image: '/images/placeholders/gallery-4.svg', alt: 'Featured project preview (placeholder image)' },
+];
+---
+
+<section class="section section--alt gallery-preview">
+  <div class="container">
+    <div class="section-heading section-heading--center">
+      <p class="section-eyebrow">Our Work</p>
+      <h2 class="section-title">Featured Projects</h2>
+    </div>
+
+    <div class="gallery-preview__grid">
+      {tiles.map((tile) => (
+        <div class="gallery-preview__tile">
+          <img
+            src={tile.image}
+            alt={tile.alt}
+            width="800"
+            height="800"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      ))}
+    </div>
+
+    <div class="gallery-preview__cta">
+      <a href="/gallery/" class="btn btn-outline">View Our Projects</a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,44 @@
+---
+// ProcessSteps.astro — simple 4-step process, generic and editable.
+const steps = [
+  {
+    number: '01',
+    title: 'Tell Us What You Need',
+    description: 'Share a few details about your project and requirements.',
+  },
+  {
+    number: '02',
+    title: 'Discuss Your Options',
+    description: 'We’ll talk through door and window options that suit your home.',
+  },
+  {
+    number: '03',
+    title: 'Receive Your Quote',
+    description: 'Get a clear quote based on your chosen products and requirements.',
+  },
+  {
+    number: '04',
+    title: 'Bring Your Project to Life',
+    description: 'Move forward with confidence once you’re ready to proceed.',
+  },
+];
+---
+
+<section class="section process-steps">
+  <div class="container">
+    <div class="section-heading section-heading--center">
+      <p class="section-eyebrow">How It Works</p>
+      <h2 class="section-title">A Simple, Straightforward Process</h2>
+    </div>
+
+    <ol class="process-steps__list">
+      {steps.map((step) => (
+        <li class="process-steps__item">
+          <span class="process-steps__number" aria-hidden="true">{step.number}</span>
+          <h3>{step.title}</h3>
+          <p>{step.description}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

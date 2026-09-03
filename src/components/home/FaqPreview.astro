@@ -1,0 +1,45 @@
+---
+// FaqPreview.astro — 4 generic, non-invented FAQ entries.
+// Answers describe the product category generally or the site's own
+// contact process — nothing specific to the (unknown) business is claimed.
+const faqs = [
+  {
+    question: 'What areas do you service?',
+    answer: 'Service area details will be confirmed here once finalised — get in touch and we’ll let you know.',
+  },
+  {
+    question: 'How long does an installation take?',
+    answer: 'Installation timeframes depend on the size and scope of your project. We’ll confirm an estimated timeline as part of your quote.',
+  },
+  {
+    question: 'Can doors and windows be custom sized?',
+    answer: 'Aluminium doors and windows can generally be tailored to suit your project’s openings and design — talk to us about your requirements.',
+  },
+  {
+    question: 'How do I request a quote?',
+    answer: 'Fill out our contact form or reach out directly, and we’ll get back to you to discuss your project and provide a quote.',
+  },
+];
+---
+
+<section class="section faq-preview">
+  <div class="container">
+    <div class="section-heading section-heading--center">
+      <p class="section-eyebrow">FAQ</p>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+    </div>
+
+    <div class="faq-preview__list">
+      {faqs.map((faq) => (
+        <div class="card faq-preview__item">
+          <h3>{faq.question}</h3>
+          <p>{faq.answer}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="faq-preview__cta">
+      <a href="/faq/" class="btn btn-outline">View All FAQs</a>
+    </div>
+  </div>
+</section>

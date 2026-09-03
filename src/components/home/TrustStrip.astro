@@ -1,0 +1,35 @@
+---
+// TrustStrip.astro — concise, non-quantified value points.
+// No unsupported claims (no years-in-business, no "#1" style statements).
+const points = [
+  {
+    label: 'Modern Design',
+    icon: 'M4 20 L4 4 L20 4 M4 12 L20 12 M12 4 L12 20',
+  },
+  {
+    label: 'Built for Performance',
+    icon: 'M3 17 L9 11 L13 15 L21 6 M21 6 L15 6 M21 6 L21 12',
+  },
+  {
+    label: 'Quality Materials',
+    icon: 'M12 3 L21 8 L21 16 L12 21 L3 16 L3 8 Z M3 8 L12 13 L21 8 M12 13 L12 21',
+  },
+  {
+    label: 'Custom Solutions',
+    icon: 'M4 6 H20 M4 12 H14 M4 18 H20 M17 9 L20 12 L17 15',
+  },
+];
+---
+
+<section class="trust-strip">
+  <div class="container trust-strip__grid">
+    {points.map((point) => (
+      <div class="trust-strip__item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d={point.icon} />
+        </svg>
+        <span>{point.label}</span>
+      </div>
+    ))}
+  </div>
+</section>
