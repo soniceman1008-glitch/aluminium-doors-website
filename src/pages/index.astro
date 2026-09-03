@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import TrustStrip from '../components/home/TrustStrip.astro';
+import AboutPreview from '../components/home/AboutPreview.astro';
+import ProductCategories from '../components/home/ProductCategories.astro';
+import WhyChooseUs from '../components/home/WhyChooseUs.astro';
+import GalleryPreview from '../components/home/GalleryPreview.astro';
+import ProcessSteps from '../components/home/ProcessSteps.astro';
+import ReviewsPreview from '../components/home/ReviewsPreview.astro';
+import FaqPreview from '../components/home/FaqPreview.astro';
+import FinalCta from '../components/home/FinalCta.astro';
+---
+
+<BaseLayout
+  title="Home"
+  description="Premium aluminium doors and windows for modern homes and developments. Request a quote today."
+  ogImage="/images/placeholders/hero.svg"
+>
+  <Hero />
+  <TrustStrip />
+  <AboutPreview />
+  <ProductCategories />
+  <WhyChooseUs />
+  <GalleryPreview />
+  <ProcessSteps />
+  <ReviewsPreview />
+  <FaqPreview />
+  <FinalCta />
+</BaseLayout>

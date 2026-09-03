@@ -1,0 +1,119 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/shared/PageHero.astro';
+import SectionIntro from '../components/shared/SectionIntro.astro';
+import BenefitsGrid from '../components/shared/BenefitsGrid.astro';
+import ProjectCta from '../components/shared/ProjectCta.astro';
+
+const approach = [
+  {
+    title: 'Quality-Focused Approach',
+    description: 'We aim to use quality materials and sound construction practices on every project.',
+    icon: 'M12 3 L21 8 L21 16 L12 21 L3 16 L3 8 Z M3 8 L12 13 L21 8 M12 13 L12 21',
+  },
+  {
+    title: 'Thoughtful Design',
+    description: 'Design choices are considered carefully to suit your home and openings.',
+    icon: 'M4 20 L4 4 L20 4 M4 12 L20 12 M12 4 L12 20',
+  },
+  {
+    title: 'Clear Communication',
+    description: 'We aim to keep you informed from initial enquiry through to completion.',
+    icon: 'M4 5 H20 V16 H9 L5 20 V16 H4 Z',
+  },
+  {
+    title: 'Customer-Focused Service',
+    description: 'Your project and requirements guide how we work with you.',
+    icon: 'M20 21 C20 17 16.4 14 12 14 C7.6 14 4 17 4 21 M12 11 A4 4 0 1 0 12 3 A4 4 0 0 0 12 11 Z',
+  },
+];
+
+const offerings = [
+  {
+    title: 'Aluminium Doors',
+    description: 'A range of aluminium door solutions for residential and commercial projects.',
+    linkLabel: 'View Aluminium Doors',
+    href: '/aluminium-doors/',
+  },
+  {
+    title: 'Aluminium Windows',
+    description: 'A range of aluminium window solutions designed to bring in natural light.',
+    linkLabel: 'View Aluminium Windows',
+    href: '/aluminium-windows/',
+  },
+  {
+    title: 'Custom Solutions',
+    description: 'Configurations tailored to non-standard openings or specific project requirements.',
+    linkLabel: 'Get in Touch',
+    href: '/contact/',
+  },
+  {
+    title: 'Project Consultation',
+    description: 'Talk through your project and available options before you commit to anything.',
+    linkLabel: 'Get in Touch',
+    href: '/contact/',
+  },
+];
+---
+
+<BaseLayout
+  title="About"
+  description="Learn about [Company Name]'s approach to aluminium doors and windows for residential and commercial projects."
+  ogImage="/images/placeholders/about-visual.svg"
+>
+  <PageHero
+    eyebrow="About Us"
+    title="About [Company Name]"
+    supportingText="Learn more about our approach to aluminium doors and windows, and what to expect when you work with us."
+  />
+
+  <SectionIntro
+    eyebrow="Company Introduction"
+    title="A Dedicated Aluminium Doors & Windows Business"
+    paragraph="[Company Name] provides aluminium doors and windows for residential and commercial projects. [Company information will be added here.]"
+  />
+
+  <BenefitsGrid eyebrow="How We Work" title="Our Approach" benefits={approach} />
+
+  <section class="section what-we-offer">
+    <div class="container">
+      <div class="section-heading section-heading--center">
+        <p class="section-eyebrow">What We Offer</p>
+        <h2 class="section-title">Our Range</h2>
+      </div>
+
+      <div class="card-grid">
+        {offerings.map((offer) => (
+          <div class="card what-we-offer__card">
+            <h3>{offer.title}</h3>
+            <p>{offer.description}</p>
+            {offer.linkLabel && offer.href && (
+              <a href={offer.href} class="btn btn-outline">{offer.linkLabel}</a>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt about-visual">
+    <div class="container">
+      <img
+        src="/images/placeholders/about-visual.svg"
+        alt="Architectural facade detail (placeholder image)"
+        width="1400"
+        height="600"
+        loading="lazy"
+        decoding="async"
+        class="about-visual__image"
+      />
+    </div>
+  </section>
+
+  <ProjectCta
+    headline="Let's Discuss Your Project"
+    supportingText="Get in touch and we’ll help you find the right aluminium doors and windows for your home or development."
+    buttonLabel="Request a Quote"
+    buttonHref="/contact/"
+  />
+</BaseLayout>

@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCta from '../components/shared/ProjectCta.astro';
+
+// Answers deliberately avoid inventing business-specific facts (prices,
+// timeframes, service areas, guarantees). Where real information isn't
+// available yet, that is stated plainly.
+const faqs = [
+  {
+    question: 'What types of aluminium doors are available?',
+    answer: 'Aluminium doors are available in a range of types, including sliding, bi-fold, hinged, French and custom configurations. Available options and project details will be confirmed during your consultation.',
+  },
+  {
+    question: 'What types of aluminium windows are available?',
+    answer: 'Aluminium windows are available in a range of types, including sliding, awning, casement, fixed and custom configurations. Available options and project details will be confirmed during your consultation.',
+  },
+  {
+    question: 'Can aluminium doors and windows be customised?',
+    answer: 'Aluminium doors and windows can generally be configured to suit specific openings and design requirements. The available configuration options for your project will be discussed as part of your enquiry.',
+  },
+  {
+    question: 'What colours and finishes are available?',
+    answer: 'Specific colours and finishes will be confirmed once you’re in touch with the business.',
+  },
+  {
+    question: 'What glass options are available?',
+    answer: 'Glass options will be discussed and confirmed as part of your quote.',
+  },
+  {
+    question: 'Do you provide installation?',
+    answer: 'Installation availability will be confirmed with the business.',
+  },
+  {
+    question: 'How do I request a quote?',
+    answer: 'You can request a quote via our Contact page — get in touch and we’ll follow up to discuss your project.',
+  },
+  {
+    question: 'How long does a project take?',
+    answer: 'Project timeframes vary depending on the scope and requirements of your project, and will be confirmed as part of your quote.',
+  },
+  {
+    question: 'Do you service my area?',
+    answer: 'Service areas will be confirmed once the business details are provided.',
+  },
+  {
+    question: 'How can I contact you?',
+    answer: 'You can reach us via our Contact page. Contact details will be added here once confirmed.',
+  },
+];
+---
+
+<BaseLayout
+  title="FAQ"
+  description="Answers to common questions about aluminium doors, windows, customisation, quotes and installation."
+  ogImage="/images/placeholders/hero.svg"
+>
+  <section class="section faq-page-heading">
+    <div class="container">
+      <div class="section-heading section-heading--center">
+        <p class="section-eyebrow">FAQ</p>
+        <h1 class="hero__title">Frequently Asked Questions</h1>
+        <p class="section-subtitle">
+          Answers to common questions about our aluminium doors and windows.
+          If you don’t see what you’re looking for, get in touch directly.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt faq-page">
+    <div class="container">
+      <div class="faq-accordion">
+        {faqs.map((faq, index) => (
+          <div class="faq-accordion__item">
+            <h2>
+              <button
+                type="button"
+                class="faq-accordion__trigger"
+                aria-expanded="false"
+                aria-controls={`faq-panel-${index}`}
+                id={`faq-trigger-${index}`}
+              >
+                <span>{faq.question}</span>
+                <svg class="faq-accordion__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M6 9 L12 15 L18 9" />
+                </svg>
+              </button>
+            </h2>
+            <div
+              id={`faq-panel-${index}`}
+              class="faq-accordion__panel"
+              role="region"
+              aria-labelledby={`faq-trigger-${index}`}
+              hidden
+            >
+              <p>{faq.answer}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <ProjectCta
+    headline="Have Another Question?"
+    supportingText="Get in touch and we’ll be happy to help."
+    buttonLabel="Contact Us"
+    buttonHref="/contact/"
+  />
+</BaseLayout>
+
+<script>
+  // Minimal vanilla JS accordion: no library. Toggles aria-expanded and
+  // the panel's `hidden` attribute. Multiple panels may be open at once.
+  const triggers = document.querySelectorAll('.faq-accordion__trigger');
+
+  triggers.forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const panelId = trigger.getAttribute('aria-controls');
+      if (!panelId) return;
+      const panel = document.getElementById(panelId);
+      if (!panel) return;
+
+      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+      trigger.setAttribute('aria-expanded', String(!isOpen));
+      panel.hidden = isOpen;
+    });
+  });
+</script>
