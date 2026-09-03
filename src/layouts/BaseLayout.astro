@@ -1,0 +1,82 @@
+---
+// BaseLayout.astro
+// Shared shell for every page: document head/SEO scaffolding, header,
+// footer, and the floating call/WhatsApp actions.
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CallButton from '../components/CallButton.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description = 'Placeholder description — final SEO copy to be written once business details are confirmed.',
+  ogImage = '/images/placeholders/hero.svg',
+} = Astro.props;
+
+const pageTitle = `${title} | [Company Name Placeholder]`;
+
+// No production domain exists yet — this is an explicit placeholder.
+// TODO: replace with the real production domain once one is assigned.
+const SITE_URL_PLACEHOLDER = 'https://example-domain-placeholder.com';
+const canonicalUrl = `${SITE_URL_PLACEHOLDER}${Astro.url.pathname}`;
+const absoluteOgImage = `${SITE_URL_PLACEHOLDER}${ogImage}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--
+      Referrer-Policy: safe to set here since it needs no knowledge of the
+      final domain/host. Other security headers (Content-Security-Policy,
+      X-Content-Type-Options, Permissions-Policy) are response-header-only
+      and are documented as a deployment requirement instead — see
+      CLAUDE.md / the Phase 6 report.
+    -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+
+    <!-- Canonical URL placeholder — domain not yet assigned. -->
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph / social preview placeholders — to be finalized with
+         real content and photography. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={absoluteOgImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <Header />
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <div class="floating-actions" aria-label="Quick contact actions">
+      <CallButton />
+      <WhatsAppButton />
+    </div>
+  </body>
+</html>
