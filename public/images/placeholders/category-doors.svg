@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="700" viewBox="0 0 900 700" role="img" aria-labelledby="t_category_doors_svg d_category_doors_svg">
+  <!-- Generic architectural placeholder illustration. Not a real product
+       or company photo. Replace with licensed project photography at
+       this same path once available. -->
+  <title id="t_category_doors_svg">Aluminium doors (placeholder)</title>
+  <desc id="d_category_doors_svg">Generic illustration of a framed aluminium door, standing in for a future product photograph.</desc>
+  <defs><linearGradient id="sky53" x1="0" y1="0" x2="0" y2="154" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f8f5ef"/><stop offset="1" stop-color="#e7eae7"/></linearGradient><radialGradient id="sun54" cx="702" cy="61.6" r="198" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff8ea" stop-opacity="0.85"/><stop offset="1" stop-color="#fff8ea" stop-opacity="0"/></radialGradient><linearGradient id="ground55" x1="0" y1="154" x2="0" y2="700" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#e9e6dd"/><stop offset="1" stop-color="#d3d0c6"/></linearGradient><linearGradient id="glass56" x1="147.60000000000002" y1="189.84" x2="359.28000000000003" y2="575.12" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#87a0ae"/><stop offset="1" stop-color="#33505f"/></linearGradient></defs>
+  <rect width="900" height="154" fill="url(#sky53)"/><circle cx="702" cy="61.6" r="198" fill="url(#sun54)"/><rect x="0" y="154" width="900" height="546" fill="url(#ground55)"/><rect x="72" y="154" width="756" height="448" fill="#f0efe9"/><rect x="58.5" y="145.6" width="783" height="8.4" fill="#1c1f24"/><rect x="142.20000000000002" y="184.44" width="615.6" height="396.08" fill="none" stroke="#1c1f24" stroke-width="5.4"/><rect x="147.60000000000002" y="189.84" width="604.8000000000001" height="385.28" fill="url(#glass56)"/><polygon points="220.17600000000004,189.84 316.9440000000001,189.84 176.63040000000004,575.12 147.60000000000002,575.12" fill="#ffffff" opacity="0.16"/><line x1="450.00000000000006" y1="189.84" x2="450.00000000000006" y2="575.12" stroke="#1c1f24" stroke-width="2.9700000000000006"/><rect x="72" y="596.4" width="756" height="7" fill="#1c1f24" opacity="0.5"/><g opacity="0.92">
+    <ellipse cx="117.36" cy="591.741935483871" rx="37.74193548387097" ry="27.174193548387095" fill="#758566"/>
+    <ellipse cx="85.27935483870968" cy="601.4677419354839" rx="27.580645161290324" ry="18.754838709677422" fill="#59684f" opacity="0.85"/>
+    <ellipse cx="147.55354838709678" cy="604.3709677419355" rx="23.225806451612904" ry="14.864516129032259" fill="#8f9c81" opacity="0.9"/>
+  </g>
+</svg>

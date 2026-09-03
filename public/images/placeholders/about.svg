@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720" role="img" aria-labelledby="t_about_svg d_about_svg">
+  <!-- Generic architectural placeholder illustration. Not a real product
+       or company photo. Replace with licensed project photography at
+       this same path once available. -->
+  <title id="t_about_svg">Architectural facade detail (placeholder)</title>
+  <desc id="d_about_svg">Generic facade illustration standing in for a future company photograph.</desc>
+  <defs><linearGradient id="sky49" x1="0" y1="0" x2="0" y2="158.4" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f8f5ef"/><stop offset="1" stop-color="#e7eae7"/></linearGradient><radialGradient id="sun50" cx="748.8000000000001" cy="63.36000000000001" r="211.2" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff8ea" stop-opacity="0.85"/><stop offset="1" stop-color="#fff8ea" stop-opacity="0"/></radialGradient><linearGradient id="ground51" x1="0" y1="158.4" x2="0" y2="720" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#e9e6dd"/><stop offset="1" stop-color="#d3d0c6"/></linearGradient><linearGradient id="glass52" x1="157.44" y1="195.264" x2="383.23199999999997" y2="480.96000000000004" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#87a0ae"/><stop offset="1" stop-color="#33505f"/></linearGradient></defs>
+  <rect width="960" height="158.4" fill="url(#sky49)"/><circle cx="748.8000000000001" cy="63.36000000000001" r="211.2" fill="url(#sun50)"/><rect x="0" y="158.4" width="960" height="561.6" fill="url(#ground51)"/><rect x="76.8" y="158.4" width="806.4" height="460.80000000000007" fill="#f0efe9"/><rect x="62.4" y="149.76" width="835.1999999999999" height="8.64" fill="#1c1f24"/><rect x="151.68" y="189.50400000000002" width="656.64" height="297.216" fill="none" stroke="#1c1f24" stroke-width="5.76"/><rect x="157.44" y="195.264" width="645.12" height="285.696" fill="url(#glass52)"/><polygon points="234.8544,195.264 338.0736,195.264 188.40576,480.96000000000004 157.44,480.96000000000004" fill="#ffffff" opacity="0.16"/><line x1="480" y1="195.264" x2="480" y2="480.96000000000004" stroke="#1c1f24" stroke-width="3.168"/><rect x="76.8" y="613.44" width="806.4" height="7.2" fill="#1c1f24" opacity="0.5"/><g opacity="0.92">
+    <ellipse cx="125.184" cy="607.858064516129" rx="40.25806451612903" ry="28.985806451612902" fill="#758566"/>
+    <ellipse cx="90.96464516129032" cy="618.2322580645161" rx="29.419354838709676" ry="20.00516129032258" fill="#59684f" opacity="0.85"/>
+    <ellipse cx="157.39045161290323" cy="621.3290322580646" rx="24.774193548387096" ry="15.855483870967742" fill="#8f9c81" opacity="0.9"/>
+  </g>
+</svg>
