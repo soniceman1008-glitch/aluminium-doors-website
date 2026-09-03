@@ -1,0 +1,22 @@
+---
+// SectionIntro.astro — short generic introduction section, shared across
+// product and content pages. Content passed in is always generic /
+// category-level, never specific to the (unknown) business.
+interface Props {
+  eyebrow: string;
+  title: string;
+  paragraph: string;
+}
+
+const { eyebrow, title, paragraph }: Props = Astro.props;
+---
+
+<section class="section section-intro">
+  <div class="container">
+    <div class="section-heading">
+      <p class="section-eyebrow">{eyebrow}</p>
+      <h2 class="section-title">{title}</h2>
+      <p class="section-subtitle">{paragraph}</p>
+    </div>
+  </div>
+</section>

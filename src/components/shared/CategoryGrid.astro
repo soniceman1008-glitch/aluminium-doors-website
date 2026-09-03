@@ -1,0 +1,49 @@
+---
+// CategoryGrid.astro — premium image + title + description cards
+// (not an ecommerce catalogue: no prices, no "add to cart"). Shared
+// across product category pages and the Gallery page. `note` clarifies
+// that the items are placeholders / not a confirmed final list.
+interface Category {
+  title: string;
+  description: string;
+  image: string;
+  alt: string;
+}
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  note: string;
+  categories: Category[];
+}
+
+const { eyebrow, title, note, categories }: Props = Astro.props;
+---
+
+<section class="section section--alt category-grid">
+  <div class="container">
+    <div class="section-heading section-heading--center">
+      <p class="section-eyebrow">{eyebrow}</p>
+      <h2 class="section-title">{title}</h2>
+      <p class="section-subtitle">{note}</p>
+    </div>
+
+    <div class="category-grid__grid">
+      {categories.map((category) => (
+        <article class="card card--interactive category-card">
+          <img
+            src={category.image}
+            alt={category.alt}
+            width="700"
+            height="550"
+            loading="lazy"
+            decoding="async"
+            class="category-card__image"
+          />
+          <h3>{category.title}</h3>
+          <p>{category.description}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

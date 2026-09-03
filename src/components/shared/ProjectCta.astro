@@ -1,0 +1,20 @@
+---
+// ProjectCta.astro — closing full-width call to action. Shared across
+// product pages, Gallery, About and FAQ.
+interface Props {
+  headline: string;
+  supportingText: string;
+  buttonLabel: string;
+  buttonHref: string;
+}
+
+const { headline, supportingText, buttonLabel, buttonHref }: Props = Astro.props;
+---
+
+<section class="section section--dark final-cta">
+  <div class="container final-cta__inner">
+    <h2 class="section-title">{headline}</h2>
+    <p>{supportingText}</p>
+    <a href={buttonHref} class="btn btn-accent">{buttonLabel}</a>
+  </div>
+</section>

@@ -1,0 +1,85 @@
+---
+// PageHero.astro — shared page-top hero used across content pages
+// (Aluminium Doors, Aluminium Windows, Gallery, About). Image and CTAs
+// are optional so pages that don't need them (e.g. About) can omit them
+// and get a centered text-only banner instead.
+interface Props {
+  eyebrow: string;
+  title: string;
+  supportingText: string;
+  primaryLabel?: string;
+  primaryHref?: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+  image?: string;
+  imageAlt?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  supportingText,
+  primaryLabel,
+  primaryHref,
+  secondaryLabel,
+  secondaryHref,
+  image,
+  imageAlt,
+}: Props = Astro.props;
+
+const hasActions = Boolean(primaryLabel && primaryHref) || Boolean(secondaryLabel && secondaryHref);
+---
+
+{image ? (
+  <section class="hero">
+    <div class="container hero__inner">
+      <div class="hero__content">
+        <p class="section-eyebrow">{eyebrow}</p>
+        <h1 class="hero__title">{title}</h1>
+        <p class="hero__subtitle">{supportingText}</p>
+        {hasActions && (
+          <div class="hero__actions">
+            {primaryLabel && primaryHref && (
+              <a href={primaryHref} class="btn btn-accent">{primaryLabel}</a>
+            )}
+            {secondaryLabel && secondaryHref && (
+              <a href={secondaryHref} class="btn btn-outline">{secondaryLabel}</a>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div class="hero__media">
+        <img
+          src={image}
+          alt={imageAlt}
+          width="960"
+          height="1200"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </div>
+    </div>
+  </section>
+) : (
+  <section class="hero">
+    <div class="container">
+      <div class="section-heading section-heading--center">
+        <p class="section-eyebrow">{eyebrow}</p>
+        <h1 class="hero__title">{title}</h1>
+        <p class="section-subtitle">{supportingText}</p>
+        {hasActions && (
+          <div class="hero__actions hero__actions--center">
+            {primaryLabel && primaryHref && (
+              <a href={primaryHref} class="btn btn-accent">{primaryLabel}</a>
+            )}
+            {secondaryLabel && secondaryHref && (
+              <a href={secondaryHref} class="btn btn-outline">{secondaryLabel}</a>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+)}
