@@ -8,13 +8,15 @@ export default defineConfig({
   // Directory-style routes (e.g. /aluminium-doors/) with a consistent
   // trailing slash — avoids duplicate-URL SEO issues on static hosting.
   trailingSlash: 'always',
-  vite: {
-    preview: {
-      // "astro preview" is used as the production server on Railway
-      // (a Node host, not a static-file host). Its dev/preview server
-      // rejects requests whose Host header isn't in this allowlist, so
-      // Railway's public domain must be listed here explicitly.
-      allowedHosts: ['aluminium-doors-website-production.up.railway.app'],
-    },
+  server: {
+    // For "output: 'static'", "astro preview" runs Astro's own static
+    // preview server (see astro/dist/core/preview/static-preview-server.js),
+    // which is a different code path from Vite's plain preview server.
+    // It only ever reads this top-level Astro "server.allowedHosts" option
+    // (default: [] — nothing but localhost is allowed) — it does NOT read
+    // "vite.preview.allowedHosts" or "vite.server.allowedHosts" at all.
+    // Railway's public domain is used as the Host header on every request,
+    // so it must be listed here explicitly or every request gets a 403.
+    allowedHosts: ['aluminium-doors-website-production.up.railway.app'],
   },
 });
