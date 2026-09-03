@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Static sitemap — hand-written, no Astro integration/package added.
+
+  IMPORTANT: every <loc> below uses the same placeholder domain already
+  used for canonical/Open Graph URLs across the site
+  (https://example-domain-placeholder.com). Replace it with the real
+  production domain before launch — see CLAUDE.md / the Phase 6 report.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://example-domain-placeholder.com/</loc>
+  </url>
+  <url>
+    <loc>https://example-domain-placeholder.com/aluminium-doors/</loc>
+  </url>
+  <url>
+    <loc>https://example-domain-placeholder.com/aluminium-windows/</loc>
+  </url>
+  <url>
+    <loc>https://example-domain-placeholder.com/gallery/</loc>
+  </url>
+  <url>
+    <loc>https://example-domain-placeholder.com/about/</loc>
+  </url>
+  <url>
+    <loc>https://example-domain-placeholder.com/faq/</loc>
+  </url>
+  <url>
+    <loc>https://example-domain-placeholder.com/contact/</loc>
+  </url>
+</urlset>

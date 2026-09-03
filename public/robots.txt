@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# NOTE: the sitemap below uses the same placeholder domain as the rest of
+# the site (canonical/Open Graph URLs). Update this line once a real
+# production domain is assigned.
+Sitemap: https://example-domain-placeholder.com/sitemap.xml
