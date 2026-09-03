@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="550" viewBox="0 0 700 550" role="img" aria-labelledby="t_project_2_svg d_project_2_svg">
+  <!-- Generic architectural placeholder illustration. Not a real product
+       or company photo. Replace with licensed project photography at
+       this same path once available. -->
+  <title id="t_project_2_svg">Featured project (placeholder)</title>
+  <desc id="d_project_2_svg">Generic architectural composition standing in for a future project photograph.</desc>
+  <defs><linearGradient id="sky117" x1="0" y1="0" x2="0" y2="165" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f8ecdc"/><stop offset="1" stop-color="#e5d8c8"/></linearGradient><radialGradient id="sun118" cx="140" cy="57.74999999999999" r="140" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff8ea" stop-opacity="0.85"/><stop offset="1" stop-color="#fff8ea" stop-opacity="0"/></radialGradient><linearGradient id="ground119" x1="0" y1="165" x2="0" y2="550" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#e9e6dd"/><stop offset="1" stop-color="#d3d0c6"/></linearGradient><linearGradient id="glass120" x1="78.96000000000001" y1="193.6" x2="268.688" y2="416.68" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#93a2ab"/><stop offset="1" stop-color="#3c4d57"/></linearGradient></defs>
+  <rect width="700" height="165" fill="url(#sky117)"/><circle cx="140" cy="57.74999999999999" r="140" fill="url(#sun118)"/><rect x="0" y="165" width="700" height="385" fill="url(#ground119)"/><rect x="42" y="165" width="616" height="286" fill="#f0efe9"/><rect x="35" y="157.3" width="630" height="7.7" fill="#1c1f24"/><rect x="74.06" y="188.7" width="551.88" height="232.88000000000002" fill="none" stroke="#1c1f24" stroke-width="4.9"/><rect x="78.96000000000001" y="193.6" width="542.08" height="223.08" fill="url(#glass120)"/><polygon points="144.0096,193.6 230.74240000000003,193.6 104.97984000000001,416.68 78.96000000000001,416.68" fill="#ffffff" opacity="0.16"/><line x1="259.65333333333336" y1="193.6" x2="259.65333333333336" y2="416.68" stroke="#1c1f24" stroke-width="2.6950000000000003"/><line x1="440.3466666666667" y1="193.6" x2="440.3466666666667" y2="416.68" stroke="#1c1f24" stroke-width="2.6950000000000003"/><rect x="42" y="446.6" width="616" height="5.5" fill="#1c1f24" opacity="0.5"/><g opacity="0.92">
+    <ellipse cx="608.72" cy="447.7" rx="26" ry="18.72" fill="#59684f"/>
+    <ellipse cx="586.62" cy="454.4" rx="19" ry="12.920000000000002" fill="#59684f" opacity="0.85"/>
+    <ellipse cx="629.52" cy="456.4" rx="16" ry="10.24" fill="#8f9c81" opacity="0.9"/>
+  </g>
+</svg>
