@@ -1,0 +1,33 @@
+---
+// DesignOptions.astro — conceptual list of configurable option categories.
+// Real values are unknown, so each item shows a clearly-marked
+// "to be confirmed" note rather than invented specifics.
+interface Props {
+  eyebrow: string;
+  title: string;
+  intro: string;
+  options: string[];
+}
+
+const { eyebrow, title, intro, options }: Props = Astro.props;
+const placeholderNote = 'Available options will be confirmed.';
+---
+
+<section class="section design-options">
+  <div class="container">
+    <div class="section-heading">
+      <p class="section-eyebrow">{eyebrow}</p>
+      <h2 class="section-title">{title}</h2>
+      <p class="section-subtitle">{intro}</p>
+    </div>
+
+    <div class="design-options__grid">
+      {options.map((option) => (
+        <div class="design-options__item">
+          <h3>{option}</h3>
+          <p class="placeholder-note placeholder-note--light">{placeholderNote}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
