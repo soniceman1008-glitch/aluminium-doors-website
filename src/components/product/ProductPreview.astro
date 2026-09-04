@@ -1,0 +1,151 @@
+---
+// ProductPreview.astro — a real, interactive image-preview swap.
+//
+// Selecting an item on the right swaps the large preview image on the
+// left with a crossfade (see src/scripts/product-preview.js for the
+// swap logic and the "Product Preview" block in global.css for the
+// crossfade CSS). This is new functionality (there was no selection-
+// driven preview anywhere on the site before), built at the user's
+// explicit request; it does not touch CategoryGrid or any other
+// existing component — it's a standalone section placed above it.
+//
+// Content is never invented here: every page passes its own existing
+// `categories`/`projects` array straight through as `items`, so the
+// titles, descriptions and images are exactly the ones already shown
+// in that page's CategoryGrid below.
+interface PreviewItem {
+  title: string;
+  description: string;
+  image: string;
+  alt: string;
+}
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  intro?: string;
+  items: PreviewItem[];
+  // Implementation #11 — Product Hotspot Interactions. Off by default:
+  // only the Aluminium Doors and Aluminium Windows pages opt in (see
+  // showHotspots={true} there). The Gallery page's own ProductPreview
+  // instance (project photos, not a single product to annotate) is left
+  // unchanged. Hotspot copy is intentionally generic/placeholder — no
+  // technical claims (dimensions, ratings, materials specifics) are
+  // invented, consistent with the rest of this site.
+  showHotspots?: boolean;
+  // Opt-in "settling rotation" variant of the stage's scroll reveal (see
+  // .anim-image-tilt-reveal in animations.css) — swaps in for the default
+  // .anim-image-reveal instead of stacking with it. Off by default so
+  // every existing caller (Gallery's ProductPreview instance included)
+  // keeps its already-verified plain reveal unchanged; only Aluminium
+  // Doors and Aluminium Windows opt in.
+  tiltReveal?: boolean;
+}
+
+const { eyebrow, title, intro, items, showHotspots = false, tiltReveal = false }: Props = Astro.props;
+
+const hotspots = [
+  {
+    // Top-left marker; its panel opens down-and-right.
+    position: 'tl',
+    title: 'Frame Profile',
+    description: 'Placeholder description — specific frame profile details will be confirmed here.',
+  },
+  {
+    // Mid-right marker; its panel opens up-and-left.
+    position: 'mr',
+    title: 'Glazing',
+    description: 'Placeholder description — specific glazing/glass options will be confirmed here.',
+  },
+  {
+    // Bottom-center marker; its panel opens upward, centered.
+    position: 'bc',
+    title: 'Hardware',
+    description: 'Placeholder description — specific handle and hardware options will be confirmed here.',
+  },
+];
+---
+
+<section class="section product-preview">
+  <div class="container">
+    <div class="section-heading anim-stagger">
+      <p class="section-eyebrow">{eyebrow}</p>
+      <h2 class="section-title">{title}</h2>
+      {intro && <p class="section-subtitle">{intro}</p>}
+    </div>
+
+    <div class="product-preview__layout anim-stagger">
+      <div class={`product-preview__stage ${tiltReveal ? 'anim-image-tilt-reveal' : 'anim-image-reveal'}`}>
+        {items.map((item, index) => (
+          <img
+            src={item.image}
+            alt={item.alt}
+            width="900"
+            height="700"
+            loading={index === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+            class={`product-preview__image${index === 0 ? ' is-active' : ''}`}
+            data-preview-image
+            data-index={index}
+          />
+        ))}
+
+        {showHotspots && (
+          <div class="product-hotspots" data-hotspots>
+            {hotspots.map((hotspot, index) => (
+              <div class={`product-hotspot product-hotspot--${hotspot.position}`}>
+                <button
+                  type="button"
+                  class="product-hotspot__marker"
+                  data-hotspot-trigger
+                  data-hotspot-index={index}
+                  aria-expanded="false"
+                  aria-controls={`hotspot-panel-${index}`}
+                  aria-label={`${hotspot.title} — show details`}
+                >
+                  <span class="product-hotspot__ring" aria-hidden="true"></span>
+                  <span class="product-hotspot__dot" aria-hidden="true"></span>
+                </button>
+
+                <div
+                  id={`hotspot-panel-${index}`}
+                  class="product-hotspot__panel"
+                  data-hotspot-panel
+                  hidden
+                >
+                  <p class="product-hotspot__panel-title">{hotspot.title}</p>
+                  <p class="product-hotspot__panel-desc">{hotspot.description}</p>
+                  <button
+                    type="button"
+                    class="product-hotspot__panel-close"
+                    data-hotspot-close
+                    aria-label={`Close ${hotspot.title} details`}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M6 6l12 12M18 6L6 18" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div class="product-preview__list" data-preview-list>
+        {items.map((item, index) => (
+          <button
+            type="button"
+            class="product-preview__item"
+            data-preview-trigger
+            data-index={index}
+            aria-pressed={index === 0 ? 'true' : 'false'}
+          >
+            <span class="product-preview__item-title">{item.title}</span>
+            <span class="product-preview__item-desc">{item.description}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
