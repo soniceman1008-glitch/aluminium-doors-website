@@ -1,0 +1,32 @@
+---
+// configurator.astro — Implementation #14: Product Configurator page.
+//
+// New page: no configurator existed anywhere in this codebase before
+// (confirmed by project-wide search) — built per the user's explicit
+// choice to create one so the requested selection micro-interactions
+// have a real configurator to live on. See
+// src/components/configurator/ProductConfigurator.astro for the actual
+// four-section form and src/styles/global.css ("Product Configurator")
+// for the selection animation.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/shared/PageHero.astro';
+import ProductConfigurator from '../components/configurator/ProductConfigurator.astro';
+---
+
+<BaseLayout
+  title="Configurator"
+  description="Configure your aluminium door — choose a size, opening style and handle, then share your details to request a quote."
+  ogImage="/images/placeholders/hero.svg"
+>
+  <PageHero
+    eyebrow="Design Your Door"
+    title="Product Configurator"
+    supportingText="Choose a size, opening style and handle for your aluminium door, then share your details and we'll follow up to confirm the options available for your project."
+  />
+
+  <section class="section section--alt">
+    <div class="container">
+      <ProductConfigurator />
+    </div>
+  </section>
+</BaseLayout>
