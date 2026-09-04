@@ -1,0 +1,342 @@
+/* ==========================================================================
+   Animation Foundation — Premium Scroll-Reveal System
+   ==========================================================================
+   Reusable, GPU-friendly (transform + opacity only) reveal utilities,
+   inspired by the smooth/minimal/architectural motion feel of
+   https://aludoors.com.au/. Driven by IntersectionObserver in
+   src/scripts/scroll-reveal.js, which toggles `.is-visible` on elements
+   carrying one of the `.anim-*` classes below — no scroll listeners.
+
+   STATUS: in active use site-wide — section headings/supporting text,
+   product/showcase images, selected CTA blocks and card groups on every
+   page carry one of these classes (see each component for exactly
+   which). Never applied to the sticky header, navigation, form
+   controls, footer controls, or utility/interactive controls (hotspot
+   markers, the ambient light toggle, the footer accordion triggers, the
+   mobile nav toggle, back-to-top) — those are all intentionally left
+   out of the reveal system.
+
+   FOUC / no-JS / no-motion safety (read before using):
+   Every "hidden" initial state below is scoped under `html.js-anim-ready`.
+   That class is set synchronously by a tiny inline script in
+   BaseLayout.astro's <head> (see the "prevents flash-of-hidden-content"
+   comment there) — and ONLY when the visitor does not prefer reduced
+   motion. Practical effect:
+     - JS disabled/blocked            -> class never added -> content is
+       simply visible, full stop (never hidden).
+     - prefers-reduced-motion: reduce -> class never added -> content is
+       simply visible, full stop.
+     - Normal case                    -> class is added, elements start
+       hidden, scroll-reveal.js reveals them via `.is-visible` as they
+       enter the viewport.
+   The global `@media (prefers-reduced-motion: reduce)` rule in
+   global.css (section 2) already collapses every transition to ~0ms as
+   a second, independent safety net.
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* Separate from --transition-fast / --transition-base in global.css on
+     purpose: those are tuned for snappy micro-interactions (hover/focus).
+     Scroll reveals want a slower, cinematic ease-out for a premium feel. */
+  --anim-duration: 700ms;
+  /* Kept within the same approximate 500-800ms window as every other
+     reveal here (was 1000ms) — .anim-image-reveal's larger travel
+     (scale + rise) still reads as a slower, more cinematic reveal than
+     .anim-fade-up purely because it moves further, not because it runs
+     longer. */
+  --anim-duration-slow: 800ms;
+  --anim-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Used only by the section scroll-reveal utilities below (not by the
+     Header/Hero rules in global.css, which reference --anim-ease
+     directly) — keeps this step's easing spec independent of
+     already-finalized Header/Hero work. */
+  --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --anim-distance: 36px;
+  --anim-scale-from: 0.96;
+  /* Image reveal — used only by .anim-image-reveal / .anim-media-reveal
+     below (untouched by every other utility, and by the separate,
+     already-finalized Hero cinematic-entrance keyframes in global.css,
+     which use their own literal values). */
+  --anim-image-scale-from: 1.08;
+  --anim-image-opacity-from: 0.85;
+  --anim-image-rise: 15px;
+  /* Tilt reveal only (section 3b) — a gentle initial rotation that
+     settles to 0deg, layered on top of the same scale/rise/opacity
+     values as .anim-image-reveal above. Kept small and single-axis
+     (never more than a few degrees) so it reads as "settling into
+     place", not spinning — same restraint already applied to
+     --anim-float-rotate below. */
+  --anim-tilt-rotate-from: -7deg;
+  --anim-stagger-step: 100ms;
+  /* Per-element override hook, e.g. style="--anim-delay: 150ms" */
+  --anim-delay: 0ms;
+  /* Floating presentation — used only by .anim-float below. Distance is
+     upward-only (see the keyframe), so it can never drift the element
+     down into the card text that follows it. */
+  --anim-float-distance: 8px;
+  --anim-float-scale: 1.015;
+  --anim-float-rotate: 0.4deg;
+  --anim-float-duration: 6800ms;
+}
+
+/* --------------------------------------------------------------------------
+   1. Fade Up — content rises slightly while fading in.
+   -------------------------------------------------------------------------- */
+html.js-anim-ready .anim-fade-up {
+  opacity: 0;
+  transform: translateY(var(--anim-distance));
+  transition:
+    opacity var(--anim-duration) var(--reveal-ease) var(--anim-delay),
+    transform var(--anim-duration) var(--reveal-ease) var(--anim-delay);
+  will-change: opacity, transform;
+}
+html.js-anim-ready .anim-fade-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   2. Fade In — plain opacity fade, no movement (for things that
+      shouldn't shift position, e.g. background panels, dividers).
+   -------------------------------------------------------------------------- */
+html.js-anim-ready .anim-fade-in {
+  opacity: 0;
+  transition: opacity var(--anim-duration) var(--reveal-ease) var(--anim-delay);
+  will-change: opacity;
+}
+html.js-anim-ready .anim-fade-in.is-visible {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   3. Image Reveal — premium architectural reveal for large/important
+      content images. Put this on the <img> itself, OR on a plain wrapper
+      immediately around it when the <img> already owns a transform
+      transition of its own (e.g. an existing hover-zoom effect) — putting
+      this class's transform transition directly on such an <img> would
+      permanently take over its `transform` transition for hover too,
+      since both would target the same property on the same element (see
+      the wrapper used in GalleryPreview.astro for a worked example).
+      Either way, the element this class is on needs an `overflow: hidden`
+      ANCESTOR (see the `*-frame`/`*-media` wrapper rules added alongside
+      each image's own styles in global.css) so the initial 1.08x scale
+      settles into, rather than spills out of, its frame. That ancestor is
+      never itself animated — it's a static clip mask, which is what keeps
+      this "clean" rather than a dramatic clip-path reveal.
+   -------------------------------------------------------------------------- */
+html.js-anim-ready .anim-image-reveal {
+  opacity: var(--anim-image-opacity-from);
+  transform: scale(var(--anim-image-scale-from)) translateY(var(--anim-image-rise));
+  transition:
+    opacity var(--anim-duration-slow) var(--reveal-ease) var(--anim-delay),
+    transform var(--anim-duration-slow) var(--reveal-ease) var(--anim-delay);
+  will-change: opacity, transform;
+}
+html.js-anim-ready .anim-image-reveal.is-visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   3b. Image Tilt Reveal — opt-in variant of the Image Reveal above: the
+       same scale/rise/opacity travel, plus a small initial rotation that
+       settles to level. Reserved for a page's single hero/lead product
+       photo (see the `tiltReveal` prop on ProductPreview.astro) — never
+       stack this with `.anim-image-reveal` on the same element, and
+       never apply both to elements inside the same `.anim-stagger`
+       group. Same overflow:hidden-ancestor requirement as section 3.
+   -------------------------------------------------------------------------- */
+/* Selector repeats `.anim-image-tilt-reveal` to add a specificity point
+   over `.anim-stagger > *` (section 6) — needed because ProductPreview's
+   stage is itself a direct child of an `.anim-stagger` container, and
+   without this bump the two rules tie in specificity, so the later-
+   declared stagger rule's plain translateY would silently win the
+   `transform` property and the rotate/scale would never be visible.
+   Scoped to only this new class so the pre-existing `.anim-image-reveal`
+   (already shipped, verified, and outside this task's scope) is left
+   exactly as it was. */
+html.js-anim-ready .anim-image-tilt-reveal.anim-image-tilt-reveal {
+  opacity: var(--anim-image-opacity-from);
+  transform: scale(var(--anim-image-scale-from)) translateY(var(--anim-image-rise))
+    rotate(var(--anim-tilt-rotate-from));
+  transition:
+    opacity var(--anim-duration-slow) var(--reveal-ease) var(--anim-delay),
+    transform var(--anim-duration-slow) var(--reveal-ease) var(--anim-delay);
+  will-change: opacity, transform;
+}
+html.js-anim-ready .anim-image-tilt-reveal.anim-image-tilt-reveal.is-visible {
+  opacity: 1;
+  transform: scale(1) translateY(0) rotate(0deg);
+}
+
+/* --------------------------------------------------------------------------
+   4. Scale Reveal — gentle grow-in, for cards/tiles/icons.
+   -------------------------------------------------------------------------- */
+html.js-anim-ready .anim-scale-reveal {
+  opacity: 0;
+  transform: scale(var(--anim-scale-from));
+  transition:
+    opacity var(--anim-duration) var(--reveal-ease) var(--anim-delay),
+    transform var(--anim-duration) var(--reveal-ease) var(--anim-delay);
+  will-change: opacity, transform;
+}
+html.js-anim-ready .anim-scale-reveal.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* --------------------------------------------------------------------------
+   5. Text Reveal — per-word mask/slide reveal for headings and short
+      lead paragraphs. scroll-reveal.js wraps the element's text into
+      .anim-text-reveal__line > .anim-text-reveal__word spans the first
+      time it runs; until then (or if JS never runs) the element's text
+      renders completely normally — this class alone changes nothing.
+   -------------------------------------------------------------------------- */
+.anim-text-reveal__line {
+  display: block;
+  overflow: hidden;
+  /* Keeps descenders (g, y, p) from being clipped by the mask. */
+  padding-bottom: 0.15em;
+  margin-bottom: -0.15em;
+}
+html.js-anim-ready .anim-text-reveal__word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(115%);
+  transition:
+    opacity var(--anim-duration) var(--reveal-ease),
+    transform var(--anim-duration) var(--reveal-ease);
+  transition-delay: calc(var(--anim-delay) + (var(--anim-word-i, 0) * 45ms));
+  will-change: opacity, transform;
+}
+html.js-anim-ready .anim-text-reveal.is-visible .anim-text-reveal__word {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   6. Staggered Children — put `.anim-stagger` on a grid/list container;
+      each direct child fades up automatically with an increasing delay.
+      No per-child class needed. Covers up to 12 children (every
+      card-grid/list in this project tops out well under that).
+   -------------------------------------------------------------------------- */
+html.js-anim-ready .anim-stagger > * {
+  opacity: 0;
+  transform: translateY(var(--anim-distance));
+  transition:
+    opacity var(--anim-duration) var(--reveal-ease),
+    transform var(--anim-duration) var(--reveal-ease);
+  will-change: opacity, transform;
+}
+html.js-anim-ready .anim-stagger.is-visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+html.js-anim-ready .anim-stagger > *:nth-child(1)  { transition-delay: calc(var(--anim-delay) + var(--anim-stagger-step) * 0); }
+html.js-anim-ready .anim-stagger > *:nth-child(2)  { transition-delay: calc(var(--anim-delay) + var(--anim-stagger-step) * 1); }
+html.js-anim-ready .anim-stagger > *:nth-child(3)  { transition-delay: calc(var(--anim-delay) + var(--anim-stagger-step) * 2); }
+html.js-anim-ready .anim-stagger > *:nth-child(4)  { transition-delay: calc(var(--anim-delay) + var(--anim-stagger-step) * 3); }
+html.js-anim-ready .anim-stagger > *:nth-child(5)  { transition-delay: calc(var(--anim-delay) + var(--anim-stagger-step) * 4); }
+html.js-anim-ready .anim-stagger > *:nth-child(6)  { transition-delay: calc(var(--anim-delay) + var(--anim-stagger-step) * 5); }
+html.js-anim-ready .anim-stagger > *:nth-child(7)  { transition-delay: calc(var(--anim-delay) + var(--anim-stagger-step) * 6); }
+html.js-anim-ready .anim-stagger > *:nth-child(8)  { transition-delay: calc(var(--anim-delay) + var(--anim-stagger-step) * 7); }
+html.js-anim-ready .anim-stagger > *:nth-child(9)  { transition-delay: calc(var(--anim-delay) + var(--anim-stagger-step) * 8); }
+html.js-anim-ready .anim-stagger > *:nth-child(10) { transition-delay: calc(var(--anim-delay) + var(--anim-stagger-step) * 9); }
+html.js-anim-ready .anim-stagger > *:nth-child(11) { transition-delay: calc(var(--anim-delay) + var(--anim-stagger-step) * 10); }
+html.js-anim-ready .anim-stagger > *:nth-child(12) { transition-delay: calc(var(--anim-delay) + var(--anim-stagger-step) * 11); }
+
+/* --------------------------------------------------------------------------
+   7. Floating Presentation — subtle elevated float for product/category
+      imagery. Put this on the *-frame WRAPPER around an <img> (never on
+      the <img> itself): the image already owns its own .anim-image-reveal
+      transition and, on hover-capable devices, its own hover-scale
+      transition — stacking this animation directly onto it would fight
+      both, since a CSS `animation` on a property always overrides a
+      `transition` targeting that same property on the same element.
+
+      The float only starts once `.is-visible` is present, which
+      scroll-reveal.js's shared IntersectionObserver already adds the
+      moment the element enters the viewport (see REVEAL_SELECTOR) — so
+      "add stronger movement only when the element enters the viewport"
+      falls out of the existing reveal system for free, no new observer.
+
+      Motion is deliberately upward-only (never downward) so the frame
+      can never visually drift into the heading/paragraph directly below
+      it, slow or the effect reads as jittery, and rotate is a fraction of
+      a degree — the "never look like it is spinning" requirement.
+   -------------------------------------------------------------------------- */
+@keyframes anim-float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translateY(calc(var(--anim-float-distance) * -1))
+      scale(var(--anim-float-scale)) rotate(var(--anim-float-rotate));
+  }
+}
+
+html.js-anim-ready .anim-float {
+  transform: translateY(0) scale(1) rotate(0deg);
+}
+html.js-anim-ready .anim-float.is-visible {
+  animation: anim-float var(--anim-float-duration) ease-in-out infinite;
+  animation-delay: var(--anim-delay);
+  will-change: transform;
+}
+/* Alternate cards float slightly out of phase with each other (half a
+   cycle apart) so a full grid doesn't move in obvious lockstep — cheap
+   desync, no extra markup, reusing the existing nth-child stagger
+   convention from section 6 above. */
+html.js-anim-ready .anim-stagger > *:nth-child(even) .anim-float.is-visible {
+  animation-delay: calc(var(--anim-delay) + (var(--anim-float-duration) / -2));
+}
+
+@media (max-width: 640px) {
+  :root {
+    /* Mobile reveal motion is slightly more restrained across the
+       board, not just the ambient float loop below: less travel
+       distance and a gentler scale delta on the same reveal utilities,
+       same durations/easing. Still opacity + transform only. */
+    --anim-distance: 24px;
+    --anim-scale-from: 0.97;
+    --anim-image-scale-from: 1.05;
+    --anim-image-rise: 10px;
+    --anim-tilt-rotate-from: -4deg;
+    --anim-float-distance: 4px;
+    --anim-float-scale: 1.008;
+    --anim-float-rotate: 0.2deg;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion — belt-and-braces on top of global.css's universal
+   transition-duration override: guarantees final, settled state (full
+   opacity, no offset/scale) even if something ends up hidden before
+   this rule is evaluated.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .anim-fade-up,
+  .anim-fade-in,
+  .anim-image-reveal,
+  .anim-image-tilt-reveal,
+  .anim-scale-reveal,
+  .anim-text-reveal__word,
+  .anim-stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* Explicit disable rather than relying solely on global.css's
+     animation-iteration-count: 1 !important — that alone would still
+     run one (imperceptibly fast, 0.01ms) cycle rather than fully
+     freezing, so this is defense-in-depth, consistent with every other
+     animated component in this codebase (.page-loader,
+     .hero-carousel__slide, .hero-carousel__name, .back-to-top). */
+  .anim-float,
+  .anim-float.is-visible {
+    animation: none !important;
+    transform: none !important;
+  }
+}
