@@ -24,12 +24,12 @@ const faqs = [
 
 <section class="section faq-preview">
   <div class="container">
-    <div class="section-heading section-heading--center">
+    <div class="section-heading section-heading--center anim-stagger">
       <p class="section-eyebrow">FAQ</p>
       <h2 class="section-title">Frequently Asked Questions</h2>
     </div>
 
-    <div class="faq-preview__list">
+    <div class="faq-preview__list anim-stagger">
       {faqs.map((faq) => (
         <div class="card faq-preview__item">
           <h3>{faq.question}</h3>
@@ -38,7 +38,7 @@ const faqs = [
       ))}
     </div>
 
-    <div class="faq-preview__cta">
+    <div class="faq-preview__cta anim-fade-up">
       <a href="/faq/" class="btn btn-outline">View All FAQs</a>
     </div>
   </div>

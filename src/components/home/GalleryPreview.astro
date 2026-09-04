@@ -12,27 +12,40 @@ const tiles = [
 
 <section class="section section--alt gallery-preview">
   <div class="container">
-    <div class="section-heading section-heading--center">
+    <div class="section-heading section-heading--center anim-stagger">
       <p class="section-eyebrow">Our Work</p>
       <h2 class="section-title">Featured Projects</h2>
     </div>
 
-    <div class="gallery-preview__grid">
+    <div class="gallery-preview__grid anim-stagger">
       {tiles.map((tile) => (
         <div class="gallery-preview__tile">
-          <img
-            src={tile.image}
-            alt={tile.alt}
-            width="800"
-            height="800"
-            loading="lazy"
-            decoding="async"
-          />
+          {/*
+            The tile itself already fades up as part of the grid's
+            .anim-stagger (see the "existing sections" scroll-reveal
+            step). This inner wrapper carries the image-specific reveal
+            (scale + rise) on a separate element so it doesn't fight
+            that stagger transition for the same `transform` property —
+            and, being a separate element from the <img>, it also
+            doesn't touch the tile's own hover-zoom transition on the
+            <img> below. Net effect matches the brief directly: the
+            container (tile) reveals while the image settles inside it.
+          */}
+          <div class="anim-image-reveal">
+            <img
+              src={tile.image}
+              alt={tile.alt}
+              width="800"
+              height="800"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         </div>
       ))}
     </div>
 
-    <div class="gallery-preview__cta">
+    <div class="gallery-preview__cta anim-fade-up">
       <a href="/gallery/" class="btn btn-outline">View Our Projects</a>
     </div>
   </div>

@@ -24,26 +24,33 @@ const categories = [
 
 <section id="products" class="section section--alt product-categories">
   <div class="container">
-    <div class="section-heading section-heading--center">
+    <div class="section-heading section-heading--center anim-stagger">
       <p class="section-eyebrow">What We Offer</p>
       <h2 class="section-title">Product Categories</h2>
     </div>
 
-    <div class="product-categories__grid">
+    <div class="product-categories__grid anim-stagger">
       {categories.map((category) => (
         <article class="card card--interactive product-card">
-          <img
-            src={category.image}
-            alt={category.alt}
-            width="900"
-            height="700"
-            loading="lazy"
-            decoding="async"
-            class="product-card__image"
-          />
+          <div class="product-card__image-frame anim-float">
+            <img
+              src={category.image}
+              alt={category.alt}
+              width="900"
+              height="700"
+              loading="lazy"
+              decoding="async"
+              class="product-card__image anim-image-reveal"
+            />
+          </div>
           <h3>{category.title}</h3>
           <p>{category.description}</p>
-          <a href={category.href} class="btn btn-outline">View Products</a>
+          <a href={category.href} class="btn btn-outline">
+            View Products
+            <svg class="btn-icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </a>
         </article>
       ))}
     </div>
