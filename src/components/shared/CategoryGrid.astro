@@ -22,24 +22,26 @@ const { eyebrow, title, note, categories }: Props = Astro.props;
 
 <section class="section section--alt category-grid">
   <div class="container">
-    <div class="section-heading section-heading--center">
+    <div class="section-heading section-heading--center anim-stagger">
       <p class="section-eyebrow">{eyebrow}</p>
       <h2 class="section-title">{title}</h2>
       <p class="section-subtitle">{note}</p>
     </div>
 
-    <div class="category-grid__grid">
+    <div class="category-grid__grid anim-stagger">
       {categories.map((category) => (
         <article class="card card--interactive category-card">
-          <img
-            src={category.image}
-            alt={category.alt}
-            width="700"
-            height="550"
-            loading="lazy"
-            decoding="async"
-            class="category-card__image"
-          />
+          <div class="category-card__image-frame anim-float">
+            <img
+              src={category.image}
+              alt={category.alt}
+              width="700"
+              height="550"
+              loading="lazy"
+              decoding="async"
+              class="category-card__image anim-image-reveal"
+            />
+          </div>
           <h3>{category.title}</h3>
           <p>{category.description}</p>
         </article>

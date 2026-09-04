@@ -21,12 +21,12 @@ const { eyebrow, title, benefits, variant = 'alt' }: Props = Astro.props;
 
 <section class={`section why-benefits ${variant === 'alt' ? 'section--alt' : ''}`}>
   <div class="container">
-    <div class="section-heading section-heading--center">
+    <div class="section-heading section-heading--center anim-stagger">
       <p class="section-eyebrow">{eyebrow}</p>
       <h2 class="section-title">{title}</h2>
     </div>
 
-    <div class="card-grid why-choose-us__grid">
+    <div class="card-grid why-choose-us__grid anim-stagger">
       {benefits.map((benefit) => (
         <div class="card why-choose-us__card">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
