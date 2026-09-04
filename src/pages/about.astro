@@ -77,12 +77,12 @@ const offerings = [
 
   <section class="section what-we-offer">
     <div class="container">
-      <div class="section-heading section-heading--center">
+      <div class="section-heading section-heading--center anim-stagger">
         <p class="section-eyebrow">What We Offer</p>
         <h2 class="section-title">Our Range</h2>
       </div>
 
-      <div class="card-grid">
+      <div class="card-grid anim-stagger">
         {offerings.map((offer) => (
           <div class="card what-we-offer__card">
             <h3>{offer.title}</h3>
@@ -98,15 +98,17 @@ const offerings = [
 
   <section class="section section--alt about-visual">
     <div class="container">
-      <img
-        src="/images/placeholders/about-visual.svg"
-        alt="Architectural facade detail (placeholder image)"
-        width="1400"
-        height="600"
-        loading="lazy"
-        decoding="async"
-        class="about-visual__image"
-      />
+      <div class="about-visual__frame">
+        <img
+          src="/images/placeholders/about-visual.svg"
+          alt="Architectural facade detail (placeholder image)"
+          width="1400"
+          height="600"
+          loading="lazy"
+          decoding="async"
+          class="about-visual__image anim-image-reveal"
+        />
+      </div>
     </div>
   </section>
 

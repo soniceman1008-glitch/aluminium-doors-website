@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/shared/PageHero.astro';
 import CategoryGrid from '../components/shared/CategoryGrid.astro';
+import ProductPreview from '../components/product/ProductPreview.astro';
 import ProjectCta from '../components/shared/ProjectCta.astro';
 
 // Generic category labels only (per the safe list) — no locations,
@@ -69,6 +70,13 @@ const projects = [
     supportingText="This gallery will showcase real aluminium door and window installations as projects are completed. For now, explore the kinds of projects we plan to feature."
     image="/images/placeholders/gallery-hero.svg"
     imageAlt="Project gallery concept (placeholder image)"
+  />
+
+  <ProductPreview
+    eyebrow="Featured Work"
+    title="Preview a Project"
+    intro="Select a project below to preview it."
+    items={projects}
   />
 
   <CategoryGrid

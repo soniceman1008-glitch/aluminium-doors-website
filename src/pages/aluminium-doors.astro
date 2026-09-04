@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/shared/PageHero.astro';
 import SectionIntro from '../components/shared/SectionIntro.astro';
 import CategoryGrid from '../components/shared/CategoryGrid.astro';
+import ProductPreview from '../components/product/ProductPreview.astro';
 import DesignOptions from '../components/product/DesignOptions.astro';
 import BenefitsGrid from '../components/shared/BenefitsGrid.astro';
 import ProjectCta from '../components/shared/ProjectCta.astro';
@@ -97,6 +98,15 @@ const benefits = [
     eyebrow="Introduction"
     title="A Modern Approach to Aluminium Doors"
     paragraph="Aluminium doors are a popular choice for modern homes and developments thanks to their slim sightlines, durability and design flexibility. They pair well with large glazed openings and contemporary architectural styles, offering a clean alternative to timber or uPVC framing."
+  />
+
+  <ProductPreview
+    eyebrow="Take a Closer Look"
+    title="Preview Door Styles"
+    intro="Select a door style below to preview it."
+    items={categories}
+    showHotspots
+    tiltReveal
   />
 
   <CategoryGrid

@@ -3,11 +3,25 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/shared/PageHero.astro';
 import SectionIntro from '../components/shared/SectionIntro.astro';
 import CategoryGrid from '../components/shared/CategoryGrid.astro';
+import ProductPreview from '../components/product/ProductPreview.astro';
 import DesignOptions from '../components/product/DesignOptions.astro';
 import BenefitsGrid from '../components/shared/BenefitsGrid.astro';
 import ProjectCta from '../components/shared/ProjectCta.astro';
 
 const categories = [
+  {
+    title: 'Casement Windows',
+    description: 'Side-hinged windows that open outward for a full, unobstructed opening.',
+    // Real photo (was a placeholder SVG like every other entry here) —
+    // free-to-use under the Unsplash License, no attribution required.
+    // Photo: "grey metal framed glass window, closed" by Lai Man Nung
+    // (https://unsplash.com/photos/grey-metal-framed-glass-window-closed-Dsms8jjMVQo),
+    // resized/re-compressed from the original 6048x4024 for web weight.
+    // Moved first in this list (was third) so it's the default preview
+    // image shown on page load, where the tilt-reveal animation plays.
+    image: '/images/products/aluminium-window-casement.jpg',
+    alt: 'Close-up of an open aluminium casement window frame',
+  },
   {
     title: 'Sliding Windows',
     description: 'Horizontally sliding windows that are simple to operate and space-efficient.',
@@ -19,12 +33,6 @@ const categories = [
     description: 'Top-hinged windows that open outward, often used for ventilation.',
     image: '/images/placeholders/window-awning.svg',
     alt: 'Aluminium awning window (placeholder image)',
-  },
-  {
-    title: 'Casement Windows',
-    description: 'Side-hinged windows that open outward for a full, unobstructed opening.',
-    image: '/images/placeholders/window-casement.svg',
-    alt: 'Aluminium casement window (placeholder image)',
   },
   {
     title: 'Fixed Windows',
@@ -97,6 +105,15 @@ const benefits = [
     eyebrow="Introduction"
     title="A Modern Approach to Aluminium Windows"
     paragraph="Aluminium windows are a widely used option in modern residential and commercial construction, valued for their slim frames, design flexibility and ability to support large glazed areas. They offer a clean, contemporary alternative to timber or uPVC framing systems."
+  />
+
+  <ProductPreview
+    eyebrow="Take a Closer Look"
+    title="Preview Window Styles"
+    intro="Select a window style below to preview it."
+    items={categories}
+    showHotspots
+    tiltReveal
   />
 
   <CategoryGrid
