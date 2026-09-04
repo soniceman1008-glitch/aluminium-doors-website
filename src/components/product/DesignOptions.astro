@@ -2,6 +2,20 @@
 // DesignOptions.astro — conceptual list of configurable option categories.
 // Real values are unknown, so each item shows a clearly-marked
 // "to be confirmed" note rather than invented specifics.
+//
+// Animation-only component: no interactivity, no selection state, no
+// backend. The `.anim-stagger`/`.anim-fade-up` classes below drive the
+// site-wide scroll-reveal engine (src/scripts/scroll-reveal.js); the
+// `design-options__heading-reveal` / `design-options__items-reveal`
+// classes ask that engine for this component's own specific rise
+// distances (30px / 25px — see global.css) without touching the shared
+// default used everywhere else (see src/styles/animations.css). Note
+// this is a CSS class, not an inline `style="--anim-distance: ..."`
+// attribute — the site's own CSP (astro.config.mjs) is `style-src
+// 'self'`, which silently blocks inline style attributes/tags, so the
+// override has to live in the external stylesheet. Hover/focus
+// micro-interactions also live entirely in global.css, scoped to
+// .design-options__item.
 interface Props {
   eyebrow: string;
   title: string;
@@ -15,13 +29,13 @@ const placeholderNote = 'Available options will be confirmed.';
 
 <section class="section design-options">
   <div class="container">
-    <div class="section-heading">
+    <div class="section-heading anim-stagger design-options__heading-reveal">
       <p class="section-eyebrow">{eyebrow}</p>
       <h2 class="section-title">{title}</h2>
       <p class="section-subtitle">{intro}</p>
     </div>
 
-    <div class="design-options__grid">
+    <div class="design-options__grid anim-stagger design-options__items-reveal">
       {options.map((option) => (
         <div class="design-options__item">
           <h3>{option}</h3>
