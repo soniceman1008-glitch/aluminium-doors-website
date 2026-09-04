@@ -10,6 +10,7 @@ const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/aluminium-doors/', label: 'Aluminium Doors' },
   { href: '/aluminium-windows/', label: 'Aluminium Windows' },
+  { href: '/configurator/', label: 'Configurator' },
   { href: '/gallery/', label: 'Gallery' },
   { href: '/about/', label: 'About' },
   { href: '/faq/', label: 'FAQ' },
@@ -45,7 +46,12 @@ function isActive(href: string) {
     </nav>
 
     <div class="header-actions">
-      <a href="/contact/" class="btn btn-accent">Request a Quote</a>
+      <a href="/contact/" class="btn btn-accent">
+        Request a Quote
+        <svg class="btn-icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
     </div>
 
     <button
@@ -71,13 +77,21 @@ function isActive(href: string) {
             class="mobile-nav__link"
             aria-current={isActive(link.href) ? 'page' : undefined}
           >
-            {link.label}
+            <span class="mobile-nav__link-label">{link.label}</span>
+            <svg class="mobile-nav__link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M7 17L17 7M17 7H7M17 7V17" />
+            </svg>
           </a>
         </li>
       ))}
     </ul>
     <div class="mobile-nav__actions">
-      <a href="/contact/" class="btn btn-accent btn-block">Request a Quote</a>
+      <a href="/contact/" class="btn btn-accent btn-block">
+        Request a Quote
+        <svg class="btn-icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
     </div>
   </nav>
 </div>
@@ -85,18 +99,45 @@ function isActive(href: string) {
 <script>
   // Minimal vanilla JS: toggles the mobile navigation panel and keeps
   // aria-expanded in sync. No framework, no dependencies.
+  //
+  // Implementation #16 additions: this full-screen panel is functionally
+  // a modal while open (it covers everything below the header), so
+  // "prevent background interaction while menu is open" is treated as
+  // appropriate here — two things, both reversed on close:
+  //   - A class on <html> (see ".nav-open" in global.css) locks page
+  //     scroll. Toggled via classList rather than an inline style,
+  //     since this site's CSP (style-src 'self') blocks JS-set inline
+  //     styles — same reasoning as every other dynamic-visual-state
+  //     component in this codebase (e.g. hero-carousel.js).
+  //   - `inert` is applied to everything else on the page (main content,
+  //     footer, the floating call/WhatsApp actions, back-to-top) so
+  //     Tab can't reach content hidden behind the panel and it's pulled
+  //     out of the accessibility tree while covered — the same pattern
+  //     already used for the collapsed footer accordion panels
+  //     (Implementation #13).
   const toggle = document.getElementById('nav-toggle');
   const panel = document.getElementById('mobile-nav');
 
   if (toggle && panel) {
+    const backgroundRegions = [
+      document.getElementById('main-content'),
+      document.querySelector('.site-footer'),
+      document.querySelector('.floating-actions'),
+      document.getElementById('back-to-top'),
+    ].filter((el) => el !== null);
+
     const closeMenu = () => {
       toggle.setAttribute('aria-expanded', 'false');
       panel.setAttribute('data-open', 'false');
+      document.documentElement.classList.remove('nav-open');
+      backgroundRegions.forEach((el) => el.removeAttribute('inert'));
     };
 
     const openMenu = () => {
       toggle.setAttribute('aria-expanded', 'true');
       panel.setAttribute('data-open', 'true');
+      document.documentElement.classList.add('nav-open');
+      backgroundRegions.forEach((el) => el.setAttribute('inert', ''));
     };
 
     toggle.addEventListener('click', () => {
@@ -109,9 +150,18 @@ function isActive(href: string) {
       link.addEventListener('click', closeMenu);
     });
 
-    // Close on Escape for keyboard users.
+    // Close on Escape for keyboard users — only while actually open, so
+    // this never steals focus from whatever the visitor is doing
+    // elsewhere on the page (a form field, another control) on an
+    // Escape press that has nothing to do with this menu. Focus returns
+    // to the toggle button itself, matching this site's other
+    // dismissible-panel pattern (see the ambient light control,
+    // Implementation #12).
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') closeMenu();
+      if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        closeMenu();
+        toggle.focus();
+      }
     });
 
     // If the viewport grows past the mobile breakpoint, reset state.
@@ -119,5 +169,60 @@ function isActive(href: string) {
     desktopQuery.addEventListener('change', (event) => {
       if (event.matches) closeMenu();
     });
+  }
+
+  // Scroll-state header treatment (Implementation #17 refines this):
+  //   - .site-header--scrolled: applied once the page has scrolled past
+  //     a small threshold, regardless of direction — just the existing
+  //     lifted/shadowed look (see global.css).
+  //   - .site-header--compact: a direction-aware "reduced prominence"
+  //     state. Scrolling DOWN past a larger threshold adds it (a subtle
+  //     opacity/scale dip — see global.css, both compositor-only
+  //     properties, no layout/height change, so nothing below the
+  //     header ever reflows or jumps). Scrolling UP by any amount
+  //     removes it immediately, restoring full prominence. Being back
+  //     near the very top always clears it outright, so reloading
+  //     mid-page or bouncing right at the top never gets stuck compact.
+  // A passive, requestAnimationFrame-throttled scroll listener is used
+  // deliberately here rather than the site's IntersectionObserver-based
+  // scroll-reveal engine — this needs actual scroll position and
+  // direction, not "has this element entered the viewport", and doing
+  // it this way avoids adding any sentinel markup outside the header
+  // itself.
+  const header = document.querySelector('.site-header');
+
+  if (header) {
+    const SCROLL_THRESHOLD = 24;
+    const COMPACT_THRESHOLD = 120;
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    const applyScrollState = () => {
+      const currentY = window.scrollY;
+      header.classList.toggle('site-header--scrolled', currentY > SCROLL_THRESHOLD);
+
+      if (currentY <= SCROLL_THRESHOLD) {
+        header.classList.remove('site-header--compact');
+      } else if (currentY > lastScrollY && currentY > COMPACT_THRESHOLD) {
+        header.classList.add('site-header--compact');
+      } else if (currentY < lastScrollY) {
+        header.classList.remove('site-header--compact');
+      }
+
+      lastScrollY = currentY;
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(applyScrollState);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    // Set the correct state immediately (handles a reload mid-scroll or
+    // browser back/forward-cache restoring a scrolled position).
+    applyScrollState();
   }
 </script>

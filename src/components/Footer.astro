@@ -2,49 +2,154 @@
 // Footer.astro
 // All contact/business details are explicit, visibly-marked placeholders.
 // Do not replace with invented data — real values are supplied later.
+//
+// Implementation #13 — Mobile Footer Accordion: each of the four existing
+// columns below (their headings/content are unchanged — see the Footer
+// Accordion section in global.css and src/scripts/footer-accordion.js)
+// is now also a disclosure widget, following the same accessible pattern
+// already used by the FAQ accordion (src/pages/faq.astro): a heading
+// wrapping a <button> with aria-expanded/aria-controls, paired with a
+// role="region" panel. On mobile the panel is collapsed by default and
+// expands with a smooth height+opacity transition on click; on desktop a
+// CSS override (matching the footer grid's own existing 768px breakpoint)
+// keeps every panel permanently visible, exactly matching the pre-existing
+// design there.
 const year = new Date().getFullYear();
+
+const columns = [
+  {
+    heading: '[Company Name Placeholder]',
+  },
+  {
+    heading: 'Explore',
+  },
+  {
+    heading: 'Contact',
+  },
+  {
+    heading: 'Get a Quote',
+  },
+];
 ---
 
-<footer class="site-footer">
+<footer class="site-footer" data-footer-accordion>
   <div class="container">
     <div class="footer-grid">
-      <div>
-        <p class="footer-heading">[Company Name Placeholder]</p>
-        <p>
-          Premium aluminium doors and windows.
-          <span class="placeholder-note">(Company description placeholder)</span>
-        </p>
+      <div class="footer-accordion__item">
+        <h3 class="footer-accordion__heading">
+          <button
+            type="button"
+            class="footer-heading footer-accordion__trigger"
+            data-footer-accordion-trigger
+            aria-expanded="false"
+            aria-controls={`footer-panel-${0}`}
+            id={`footer-trigger-${0}`}
+          >
+            <span>{columns[0].heading}</span>
+            <span class="footer-accordion__icon" aria-hidden="true"></span>
+          </button>
+        </h3>
+        <div
+          id={`footer-panel-${0}`}
+          class="footer-accordion__panel"
+          role="region"
+          aria-labelledby={`footer-trigger-${0}`}
+        >
+          <div class="footer-accordion__panel-inner">
+            <p>
+              Premium aluminium doors and windows.
+              <span class="placeholder-note">(Company description placeholder)</span>
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div>
-        <p class="footer-heading">Explore</p>
-        <ul class="footer-links">
-          <li><a href="/aluminium-doors/">Aluminium Doors</a></li>
-          <li><a href="/aluminium-windows/">Aluminium Windows</a></li>
-          <li><a href="/gallery/">Gallery</a></li>
-          <li><a href="/about/">About</a></li>
-          <li><a href="/faq/">FAQ</a></li>
-        </ul>
+      <div class="footer-accordion__item">
+        <h3 class="footer-accordion__heading">
+          <button
+            type="button"
+            class="footer-heading footer-accordion__trigger"
+            data-footer-accordion-trigger
+            aria-expanded="false"
+            aria-controls={`footer-panel-${1}`}
+            id={`footer-trigger-${1}`}
+          >
+            <span>{columns[1].heading}</span>
+            <span class="footer-accordion__icon" aria-hidden="true"></span>
+          </button>
+        </h3>
+        <div
+          id={`footer-panel-${1}`}
+          class="footer-accordion__panel"
+          role="region"
+          aria-labelledby={`footer-trigger-${1}`}
+        >
+          <div class="footer-accordion__panel-inner">
+            <ul class="footer-links">
+              <li><a href="/aluminium-doors/">Aluminium Doors</a></li>
+              <li><a href="/aluminium-windows/">Aluminium Windows</a></li>
+              <li><a href="/gallery/">Gallery</a></li>
+              <li><a href="/about/">About</a></li>
+              <li><a href="/faq/">FAQ</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
 
-      <div>
-        <p class="footer-heading">Contact</p>
-        <ul class="footer-links">
-          <li>
-            <span class="placeholder-note">[Phone Number Placeholder]</span>
-          </li>
-          <li>
-            <span class="placeholder-note">[Email Address Placeholder]</span>
-          </li>
-          <li>
-            <span class="placeholder-note">[Business Address Placeholder]</span>
-          </li>
-        </ul>
+      <div class="footer-accordion__item">
+        <h3 class="footer-accordion__heading">
+          <button
+            type="button"
+            class="footer-heading footer-accordion__trigger"
+            data-footer-accordion-trigger
+            aria-expanded="false"
+            aria-controls={`footer-panel-${2}`}
+            id={`footer-trigger-${2}`}
+          >
+            <span>{columns[2].heading}</span>
+            <span class="footer-accordion__icon" aria-hidden="true"></span>
+          </button>
+        </h3>
+        <div
+          id={`footer-panel-${2}`}
+          class="footer-accordion__panel"
+          role="region"
+          aria-labelledby={`footer-trigger-${2}`}
+        >
+          <div class="footer-accordion__panel-inner">
+            <ul class="footer-links">
+              <li><span class="placeholder-note">[Phone Number Placeholder]</span></li>
+              <li><span class="placeholder-note">[Email Address Placeholder]</span></li>
+              <li><span class="placeholder-note">[Business Address Placeholder]</span></li>
+            </ul>
+          </div>
+        </div>
       </div>
 
-      <div>
-        <p class="footer-heading">Get a Quote</p>
-        <a href="/contact/" class="btn btn-outline btn-on-dark">Request a Quote</a>
+      <div class="footer-accordion__item">
+        <h3 class="footer-accordion__heading">
+          <button
+            type="button"
+            class="footer-heading footer-accordion__trigger"
+            data-footer-accordion-trigger
+            aria-expanded="false"
+            aria-controls={`footer-panel-${3}`}
+            id={`footer-trigger-${3}`}
+          >
+            <span>{columns[3].heading}</span>
+            <span class="footer-accordion__icon" aria-hidden="true"></span>
+          </button>
+        </h3>
+        <div
+          id={`footer-panel-${3}`}
+          class="footer-accordion__panel"
+          role="region"
+          aria-labelledby={`footer-trigger-${3}`}
+        >
+          <div class="footer-accordion__panel-inner">
+            <a href="/contact/" class="btn btn-outline btn-on-dark">Request a Quote</a>
+          </div>
+        </div>
       </div>
     </div>
 
