@@ -1,0 +1,325 @@
+---
+// contact.astro — Phase 5: Contact / Quote Enquiry page.
+//
+// Frontend-only quote enquiry form. There is no backend, form service, or
+// API connected yet — submission is intercepted client-side, validated,
+// and a clear "not configured yet" message is shown. No data is
+// transmitted, stored, or logged anywhere.
+//
+// Business contact details (phone, email, address, hours, service area)
+// are not yet available and are shown as clearly marked placeholders,
+// consistent with the rest of the site. None are rendered as clickable
+// tel:/mailto:/wa.me links, since the values aren't real.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/shared/PageHero.astro';
+
+// Generic, non-exhaustive options — explicitly not presented as the full
+// business offering.
+const productInterestOptions = [
+  { value: '', label: 'Select an option (optional)' },
+  { value: 'aluminium-doors', label: 'Aluminium Doors' },
+  { value: 'aluminium-windows', label: 'Aluminium Windows' },
+  { value: 'not-sure', label: 'Not Sure Yet' },
+  { value: 'other', label: 'Other / To Be Confirmed' },
+];
+---
+
+<BaseLayout
+  title="Contact"
+  description="Request a quote for aluminium doors and windows. Tell us about your project and we'll be ready to discuss the available options."
+  ogImage="/images/placeholders/hero.svg"
+>
+  <PageHero
+    eyebrow="Get In Touch"
+    title="Request a Quote"
+    supportingText="Tell us a little about your project and we'll be ready to discuss the available options."
+  />
+
+  <section class="section contact-section">
+    <div class="container contact-layout anim-stagger">
+      <div class="contact-form-wrap">
+        <h2>Enquiry Details</h2>
+        <p class="form-hint">Fields marked with <span class="required-indicator" aria-hidden="true">*</span> are required.</p>
+
+        <!--
+          method="post" with no action set (defaults to this page) rather
+          than a bare form with no method: if JavaScript is ever
+          unavailable, this avoids field values being appended to the URL
+          as a GET query string. There is still no backend to receive
+          this — the "submit" is always intercepted and handled entirely
+          client-side below.
+        -->
+        <form class="quote-form" id="quote-form" method="post" novalidate>
+          <div class="form-field">
+            <label for="name">Name <span class="required-indicator" aria-hidden="true">*</span></label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              autocomplete="name"
+              maxlength="100"
+              required
+              aria-describedby="name-error"
+            />
+            <p class="field-error" id="name-error"></p>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="phone">Phone <span class="required-indicator" aria-hidden="true">*</span></label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                autocomplete="tel"
+                inputmode="tel"
+                maxlength="30"
+                required
+                aria-describedby="phone-error"
+              />
+              <p class="field-error" id="phone-error"></p>
+            </div>
+
+            <div class="form-field">
+              <label for="email">Email <span class="required-indicator" aria-hidden="true">*</span></label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                autocomplete="email"
+                maxlength="254"
+                required
+                aria-describedby="email-error"
+              />
+              <p class="field-error" id="email-error"></p>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="suburb">Suburb / Postcode</label>
+            <!--
+              autocomplete intentionally omitted: this single field combines
+              two distinct address concepts (suburb and postcode), so no
+              single autocomplete token (e.g. address-level2 vs
+              postal-code) describes it correctly without risking incorrect
+              browser autofill.
+            -->
+            <input
+              type="text"
+              id="suburb"
+              name="suburb"
+              autocomplete="off"
+              maxlength="100"
+              aria-describedby="suburb-error"
+            />
+            <p class="field-error" id="suburb-error"></p>
+          </div>
+
+          <div class="form-field">
+            <label for="product-interest">Product Interest</label>
+            <select id="product-interest" name="productInterest">
+              {productInterestOptions.map((option) => (
+                <option value={option.value}>{option.label}</option>
+              ))}
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="message">Message <span class="required-indicator" aria-hidden="true">*</span></label>
+            <textarea
+              id="message"
+              name="message"
+              rows="6"
+              maxlength="2000"
+              required
+              aria-describedby="message-error"
+            ></textarea>
+            <p class="field-error" id="message-error"></p>
+          </div>
+
+          <p class="privacy-note">
+            Please only share information relevant to your enquiry. Contact details will be used to respond to your request.
+          </p>
+
+          <div
+            id="form-status"
+            class="form-status"
+            role="alert"
+            aria-live="assertive"
+            tabindex="-1"
+            hidden
+          ></div>
+
+          <button type="submit" class="btn btn-accent btn-block">Submit Enquiry</button>
+        </form>
+      </div>
+
+      <aside class="contact-info-card card" aria-labelledby="contact-info-heading">
+        <h2 id="contact-info-heading">Contact Information</h2>
+        <p class="placeholder-note--light">
+          Direct contact details will be added here once confirmed by the business.
+        </p>
+
+        <ul class="contact-info-list">
+          <li>
+            <span class="contact-info-label">Phone</span>
+            <span class="placeholder-note--light">[Phone Number Placeholder]</span>
+          </li>
+          <li>
+            <span class="contact-info-label">Email</span>
+            <span class="placeholder-note--light">[Email Address Placeholder]</span>
+          </li>
+          <li>
+            <span class="contact-info-label">Address</span>
+            <span class="placeholder-note--light">[Business Address Placeholder]</span>
+          </li>
+          <li>
+            <span class="contact-info-label">Service Area</span>
+            <span class="placeholder-note--light">Service areas will be confirmed once the business details are provided.</span>
+          </li>
+          <li>
+            <span class="contact-info-label">Hours</span>
+            <span class="placeholder-note--light">Business hours will be confirmed once available.</span>
+          </li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Phase 5: frontend-only validation and submit handling.
+  //
+  // - No network request is ever made (no fetch/XHR/beacon).
+  // - No form values are written to localStorage/sessionStorage.
+  // - No form values are logged to the console.
+  // - Structured as small, named functions per field so a real
+  //   server-side-backed submit handler can replace only the "valid
+  //   submission" branch later, without touching validation logic.
+  const form = document.getElementById('quote-form');
+
+  if (form instanceof HTMLFormElement) {
+    type FieldConfig = {
+      el: HTMLInputElement | HTMLTextAreaElement;
+      required: boolean;
+      maxLength: number;
+      label: string;
+      isEmail?: boolean;
+    };
+
+    const getInput = (id: string) => document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement | null;
+
+    const nameEl = getInput('name');
+    const phoneEl = getInput('phone');
+    const emailEl = getInput('email');
+    const suburbEl = getInput('suburb');
+    const messageEl = getInput('message');
+    const statusEl = document.getElementById('form-status');
+
+    if (nameEl && phoneEl && emailEl && suburbEl && messageEl && statusEl) {
+      const fields: Record<string, FieldConfig> = {
+        name: { el: nameEl, required: true, maxLength: 100, label: 'Name' },
+        phone: { el: phoneEl, required: true, maxLength: 30, label: 'Phone' },
+        email: { el: emailEl, required: true, maxLength: 254, label: 'Email', isEmail: true },
+        suburb: { el: suburbEl, required: false, maxLength: 100, label: 'Suburb / Postcode' },
+        message: { el: messageEl, required: true, maxLength: 2000, label: 'Message' },
+      };
+
+      const setError = (key: string, message: string | null) => {
+        const field = fields[key];
+        const errorEl = document.getElementById(`${key}-error`);
+        if (!field || !errorEl) return;
+
+        if (message) {
+          field.el.setAttribute('aria-invalid', 'true');
+          errorEl.textContent = message;
+        } else {
+          field.el.removeAttribute('aria-invalid');
+          errorEl.textContent = '';
+        }
+      };
+
+      // Trim before validating (per spec), without rewriting what the
+      // user actually typed in the field.
+      const validateField = (key: string): boolean => {
+        const field = fields[key];
+        if (!field) return true;
+
+        const trimmed = field.el.value.trim();
+
+        if (field.required && trimmed.length === 0) {
+          setError(key, `${field.label} is required.`);
+          return false;
+        }
+
+        if (trimmed.length > field.maxLength) {
+          setError(key, `${field.label} must be ${field.maxLength} characters or fewer.`);
+          return false;
+        }
+
+        if (field.isEmail && trimmed.length > 0 && !field.el.checkValidity()) {
+          setError(key, 'Please enter a valid email address.');
+          return false;
+        }
+
+        setError(key, null);
+        return true;
+      };
+
+      Object.keys(fields).forEach((key) => {
+        const field = fields[key];
+        field.el.addEventListener('blur', () => validateField(key));
+        field.el.addEventListener('input', () => {
+          // Re-validate as the user types only once a field has already
+          // been flagged invalid, so we're not flashing errors at people
+          // mid-keystroke on their first pass through the form.
+          if (field.el.getAttribute('aria-invalid') === 'true') {
+            validateField(key);
+          }
+        });
+      });
+
+      // moveFocus is false on the error path: focus is sent to the first
+      // invalid field instead (so a screen reader user lands directly on
+      // the field description), while the status text still updates and
+      // is announced via aria-live regardless of where focus is.
+      const showStatus = (message: string, kind: 'success' | 'error', moveFocus: boolean) => {
+        statusEl.hidden = false;
+        statusEl.textContent = message;
+        statusEl.className = `form-status form-status--${kind}`;
+        if (moveFocus) {
+          statusEl.focus();
+        }
+      };
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        let firstInvalidKey: string | null = null;
+        Object.keys(fields).forEach((key) => {
+          const isValid = validateField(key);
+          if (!isValid && !firstInvalidKey) {
+            firstInvalidKey = key;
+          }
+        });
+
+        if (firstInvalidKey) {
+          showStatus('Please correct the highlighted fields and try again.', 'error', false);
+          fields[firstInvalidKey].el.focus();
+          return;
+        }
+
+        // Valid submission: nothing is sent or stored anywhere. This is a
+        // deliberately honest, non-deceptive message — it does not claim
+        // the enquiry was delivered.
+        form.reset();
+        Object.keys(fields).forEach((key) => setError(key, null));
+        showStatus(
+          'Thank you. Online enquiry delivery is not configured yet. Please check back once contact details are available.',
+          'success',
+          true
+        );
+      });
+    }
+  }
+</script>

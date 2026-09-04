@@ -1,0 +1,287 @@
+---
+// ProductConfigurator.astro — Implementation #14.
+//
+// This is new functionality: no product configurator existed anywhere in
+// this codebase before this component (confirmed by searching the whole
+// project for "configurator" and the brief's own named sections). Built
+// per the user's explicit choice to create one, so the requested
+// micro-interactions (a yellow "selected" state, smooth transition, no
+// bouncing, full keyboard support) have something real to apply to.
+//
+// Four numbered sections, as specified:
+//   01 Sizes, 02 Door Opening, 03 Handles — single-select option pills
+//   04 Personal Details — a short contact form
+//
+// All option labels below are generic placeholders (no real product
+// specs, dimensions, or business-specific claims are invented), the same
+// "use placeholder/example content" approach already used for the
+// product hotspots (Implementation #11) and everywhere else on this site.
+//
+// Selection mechanism: each pill is a native <input type="radio"> (one
+// group per section, so only one option per section can ever be active —
+// enforced by the browser itself, not by JS) paired with a <label>
+// styled as the visible pill. This means:
+//   - Keyboard support (Tab into/out of the group, Arrow keys to move
+//     the selection, Space/click to choose) is entirely native — nothing
+//     to reimplement or get wrong.
+//   - The active/inactive visual states and the transition between them
+//     are pure CSS (:checked, :focus-visible — see the "Product
+//     Configurator" section in global.css), so there is no JS path that
+//     could break "all selections must remain functional after animation
+//     is added" — the animation is a property on the same rule that
+//     already drives the state, not a separate effect layered on top.
+//   - No inline styles or JS-set custom properties are needed for this
+//     (this site's CSP is style-src 'self', same reasoning documented
+//     throughout this codebase), since :checked already does the state
+//     switch.
+//
+// Personal Details reuses the exact same .form-field/.field-error/
+// .form-status classes and client-side-only validation pattern already
+// used by the real quote form on the Contact page (src/pages/contact.astro)
+// — same honest "not configured yet" outcome on submit, since there is
+// still no backend anywhere on this site.
+const sizeOptions = [
+  { value: 'small', label: 'Small' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'large', label: 'Large' },
+  { value: 'custom', label: 'Custom Size' },
+];
+
+const openingOptions = [
+  { value: 'left', label: 'Left Opening' },
+  { value: 'right', label: 'Right Opening' },
+  { value: 'sliding', label: 'Sliding' },
+  { value: 'double', label: 'Double Opening' },
+];
+
+const handleOptions = [
+  { value: 'bar', label: 'Bar Handle' },
+  { value: 'lever', label: 'Lever Handle' },
+  { value: 'pull', label: 'Pull Handle' },
+  { value: 'flush', label: 'Flush Handle' },
+];
+
+const pillSections = [
+  { number: '01', legend: 'Sizes', name: 'configuratorSize', options: sizeOptions },
+  { number: '02', legend: 'Door Opening', name: 'configuratorOpening', options: openingOptions },
+  { number: '03', legend: 'Handles', name: 'configuratorHandle', options: handleOptions },
+];
+---
+
+<form class="configurator anim-stagger" id="configurator-form" method="post" novalidate>
+  {pillSections.map((section) => (
+    <fieldset class="configurator-section">
+      <legend class="configurator-section__legend">
+        <span class="configurator-section__number" aria-hidden="true">{section.number}</span>
+        {section.legend}
+      </legend>
+      <div class="configurator-options">
+        {section.options.map((option, index) => {
+          const inputId = `${section.name}-${option.value}`;
+          return (
+            <span class="configurator-option">
+              <input
+                type="radio"
+                id={inputId}
+                name={section.name}
+                value={option.value}
+                class="configurator-option__input"
+                checked={index === 0}
+              />
+              <label for={inputId} class="configurator-option__label">
+                {option.label}
+              </label>
+            </span>
+          );
+        })}
+      </div>
+    </fieldset>
+  ))}
+
+  <fieldset class="configurator-section">
+    <legend class="configurator-section__legend">
+      <span class="configurator-section__number" aria-hidden="true">04</span>
+      Personal Details
+    </legend>
+
+    <div class="configurator-details">
+      <div class="form-field">
+        <label for="configurator-name">Name <span class="required-indicator" aria-hidden="true">*</span></label>
+        <input
+          type="text"
+          id="configurator-name"
+          name="name"
+          autocomplete="name"
+          maxlength="100"
+          required
+          aria-describedby="configurator-name-error"
+        />
+        <p class="field-error" id="configurator-name-error"></p>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="configurator-phone">Phone <span class="required-indicator" aria-hidden="true">*</span></label>
+          <input
+            type="tel"
+            id="configurator-phone"
+            name="phone"
+            autocomplete="tel"
+            inputmode="tel"
+            maxlength="30"
+            required
+            aria-describedby="configurator-phone-error"
+          />
+          <p class="field-error" id="configurator-phone-error"></p>
+        </div>
+
+        <div class="form-field">
+          <label for="configurator-email">Email <span class="required-indicator" aria-hidden="true">*</span></label>
+          <input
+            type="email"
+            id="configurator-email"
+            name="email"
+            autocomplete="email"
+            maxlength="254"
+            required
+            aria-describedby="configurator-email-error"
+          />
+          <p class="field-error" id="configurator-email-error"></p>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <p class="privacy-note">
+    Please only share information relevant to your enquiry. Contact details will be used to respond to your request.
+  </p>
+
+  <div
+    id="configurator-status"
+    class="form-status"
+    role="alert"
+    aria-live="assertive"
+    tabindex="-1"
+    hidden
+  ></div>
+
+  <button type="submit" class="btn btn-accent btn-block">Submit Configuration</button>
+</form>
+
+<script>
+  // Client-side-only validation and submit handling for the Personal
+  // Details fields — the radio groups above always have a valid default
+  // selection, so there is nothing to validate there. Structurally this
+  // is the same pattern as src/pages/contact.astro's quote form: no
+  // network request, nothing written to storage, nothing logged.
+  const form = document.getElementById('configurator-form');
+
+  if (form instanceof HTMLFormElement) {
+    type FieldConfig = {
+      el: HTMLInputElement;
+      required: boolean;
+      maxLength: number;
+      label: string;
+      isEmail?: boolean;
+    };
+
+    const getInput = (id: string) => document.getElementById(id) as HTMLInputElement | null;
+
+    const nameEl = getInput('configurator-name');
+    const phoneEl = getInput('configurator-phone');
+    const emailEl = getInput('configurator-email');
+    const statusEl = document.getElementById('configurator-status');
+
+    if (nameEl && phoneEl && emailEl && statusEl) {
+      const fields: Record<string, FieldConfig> = {
+        name: { el: nameEl, required: true, maxLength: 100, label: 'Name' },
+        phone: { el: phoneEl, required: true, maxLength: 30, label: 'Phone' },
+        email: { el: emailEl, required: true, maxLength: 254, label: 'Email', isEmail: true },
+      };
+
+      const setError = (key: string, message: string | null) => {
+        const field = fields[key];
+        const errorEl = document.getElementById(`configurator-${key}-error`);
+        if (!field || !errorEl) return;
+
+        if (message) {
+          field.el.setAttribute('aria-invalid', 'true');
+          errorEl.textContent = message;
+        } else {
+          field.el.removeAttribute('aria-invalid');
+          errorEl.textContent = '';
+        }
+      };
+
+      const validateField = (key: string): boolean => {
+        const field = fields[key];
+        if (!field) return true;
+
+        const trimmed = field.el.value.trim();
+
+        if (field.required && trimmed.length === 0) {
+          setError(key, `${field.label} is required.`);
+          return false;
+        }
+
+        if (trimmed.length > field.maxLength) {
+          setError(key, `${field.label} must be ${field.maxLength} characters or fewer.`);
+          return false;
+        }
+
+        if (field.isEmail && trimmed.length > 0 && !field.el.checkValidity()) {
+          setError(key, 'Please enter a valid email address.');
+          return false;
+        }
+
+        setError(key, null);
+        return true;
+      };
+
+      Object.keys(fields).forEach((key) => {
+        const field = fields[key];
+        field.el.addEventListener('blur', () => validateField(key));
+        field.el.addEventListener('input', () => {
+          if (field.el.getAttribute('aria-invalid') === 'true') {
+            validateField(key);
+          }
+        });
+      });
+
+      const showStatus = (message: string, kind: 'success' | 'error', moveFocus: boolean) => {
+        statusEl.hidden = false;
+        statusEl.textContent = message;
+        statusEl.className = `form-status form-status--${kind}`;
+        if (moveFocus) {
+          statusEl.focus();
+        }
+      };
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        let firstInvalidKey: string | null = null;
+        Object.keys(fields).forEach((key) => {
+          const isValid = validateField(key);
+          if (!isValid && !firstInvalidKey) {
+            firstInvalidKey = key;
+          }
+        });
+
+        if (firstInvalidKey) {
+          showStatus('Please correct the highlighted fields and try again.', 'error', false);
+          fields[firstInvalidKey].el.focus();
+          return;
+        }
+
+        form.reset();
+        Object.keys(fields).forEach((key) => setError(key, null));
+        showStatus(
+          'Thank you. Online configuration delivery is not configured yet. Please check back once contact details are available.',
+          'success',
+          true
+        );
+      });
+    }
+  }
+</script>

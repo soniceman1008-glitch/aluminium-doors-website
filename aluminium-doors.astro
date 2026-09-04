@@ -1,0 +1,134 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/shared/PageHero.astro';
+import SectionIntro from '../components/shared/SectionIntro.astro';
+import CategoryGrid from '../components/shared/CategoryGrid.astro';
+import ProductPreview from '../components/product/ProductPreview.astro';
+import DesignOptions from '../components/product/DesignOptions.astro';
+import BenefitsGrid from '../components/shared/BenefitsGrid.astro';
+import ProjectCta from '../components/shared/ProjectCta.astro';
+
+const categories = [
+  {
+    title: 'Sliding Doors',
+    description: 'Space-saving doors that slide along a track — a popular option for opening onto outdoor areas.',
+    image: '/images/placeholders/door-sliding.svg',
+    alt: 'Aluminium sliding door (placeholder image)',
+  },
+  {
+    title: 'Bi-Fold Doors',
+    description: 'Multi-panel doors that fold back to create a wide, open connection between indoor and outdoor spaces.',
+    image: '/images/placeholders/door-bifold.svg',
+    alt: 'Aluminium bi-fold door (placeholder image)',
+  },
+  {
+    title: 'Hinged Doors',
+    description: 'Traditional hinged doors offering simple, reliable operation for a range of openings.',
+    image: '/images/placeholders/door-hinged.svg',
+    alt: 'Aluminium hinged door (placeholder image)',
+  },
+  {
+    title: 'French Doors',
+    description: 'Classic double doors that open outward, adding a traditional touch to modern openings.',
+    image: '/images/placeholders/door-french.svg',
+    alt: 'Aluminium French doors (placeholder image)',
+  },
+  {
+    title: 'Custom Aluminium Doors',
+    description: 'Bespoke door solutions configured to suit non-standard openings or specific design requirements.',
+    image: '/images/placeholders/door-custom.svg',
+    alt: 'Custom aluminium door concept (placeholder image)',
+  },
+];
+
+const designOptions = ['Styles', 'Finishes', 'Colours', 'Glass Options', 'Hardware', 'Configurations'];
+
+const benefits = [
+  {
+    title: 'Slim, Modern Sightlines',
+    description: 'Aluminium framing allows for slimmer profiles, supporting a clean, contemporary look.',
+    icon: 'M4 20 L4 4 L20 4 M4 12 L20 12 M12 4 L12 20',
+  },
+  {
+    title: 'Durable Construction',
+    description: 'Aluminium is a naturally durable material suited to everyday residential and commercial use.',
+    icon: 'M12 3 L21 8 L21 16 L12 21 L3 16 L3 8 Z M3 8 L12 13 L21 8 M12 13 L12 21',
+  },
+  {
+    title: 'Low Maintenance',
+    description: 'Aluminium framing generally requires little upkeep to keep doors looking and functioning well.',
+    icon: 'M12 3 L20 6 V11 C20 16 16.5 19.5 12 21 C7.5 19.5 4 16 4 11 V6 Z M8.5 12 L11 14.5 L16 9',
+  },
+  {
+    title: 'Design Flexibility',
+    description: 'Available in a range of configurations to suit different openings and architectural styles.',
+    icon: 'M4 6 H20 M4 12 H14 M4 18 H20 M17 9 L20 12 L17 15',
+  },
+  {
+    title: 'Complements Large Glazing',
+    description: 'Slim frame lines make aluminium doors a natural fit for large glazed openings.',
+    icon: 'M12 4 V2 M12 22 V20 M4 12 H2 M22 12 H20 M5.6 5.6 L4.2 4.2 M19.8 19.8 L18.4 18.4 M5.6 18.4 L4.2 19.8 M19.8 4.2 L18.4 5.6 M12 8 A4 4 0 1 0 12 16 A4 4 0 0 0 12 8 Z',
+  },
+  {
+    title: 'Suits Modern & Traditional Homes',
+    description: 'Aluminium doors can be styled to suit both contemporary and more traditional home designs.',
+    icon: 'M4 11 L12 4 L20 11 M6 10 V20 H18 V10',
+  },
+];
+---
+
+<BaseLayout
+  title="Aluminium Doors"
+  description="Explore aluminium door options for modern residential and commercial projects — sliding, bi-fold, hinged, French and custom configurations."
+  ogImage="/images/placeholders/doors-hero.svg"
+>
+  <PageHero
+    eyebrow="Aluminium Doors"
+    title="Aluminium Doors"
+    supportingText="A range of aluminium door solutions designed to combine clean architectural lines with everyday performance for residential and commercial projects."
+    primaryLabel="Request a Quote"
+    primaryHref="/contact/"
+    secondaryLabel="View Our Projects"
+    secondaryHref="/gallery/"
+    image="/images/placeholders/doors-hero.svg"
+    imageAlt="Aluminium door concept (placeholder image)"
+  />
+
+  <SectionIntro
+    eyebrow="Introduction"
+    title="A Modern Approach to Aluminium Doors"
+    paragraph="Aluminium doors are a popular choice for modern homes and developments thanks to their slim sightlines, durability and design flexibility. They pair well with large glazed openings and contemporary architectural styles, offering a clean alternative to timber or uPVC framing."
+  />
+
+  <ProductPreview
+    eyebrow="Take a Closer Look"
+    title="Preview Door Styles"
+    intro="Select a door style below to preview it."
+    items={categories}
+    showHotspots
+    tiltReveal
+  />
+
+  <CategoryGrid
+    eyebrow="Explore Our Range"
+    title="Door Categories"
+    note="The categories below reflect common aluminium door types. Final product offerings will be confirmed and updated here."
+    categories={categories}
+  />
+
+  <DesignOptions
+    eyebrow="Configure Your Doors"
+    title="Design & Options"
+    intro="Aluminium doors can typically be configured across a range of styles, finishes and hardware. Specific options for this business will be confirmed and listed here."
+    options={designOptions}
+  />
+
+  <BenefitsGrid eyebrow="The Benefits" title="Why Aluminium Doors" benefits={benefits} />
+
+  <ProjectCta
+    headline="Have a Project in Mind?"
+    supportingText="Get in touch and we’ll help you find the right aluminium doors for your home or development."
+    buttonLabel="Request a Quote"
+    buttonHref="/contact/"
+  />
+</BaseLayout>

@@ -1,0 +1,195 @@
+---
+// BaseLayout.astro
+// Shared shell for every page: document head/SEO scaffolding, header,
+// footer, and the floating call/WhatsApp actions.
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CallButton from '../components/CallButton.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import '../styles/global.css';
+// Scroll-reveal animation foundation (utilities + engine). Importing
+// these makes the system available site-wide; it does not animate
+// anything by itself — see src/styles/animations.css for the classes
+// this unlocks for a later step to apply.
+import '../styles/animations.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description = 'Placeholder description — final SEO copy to be written once business details are confirmed.',
+  ogImage = '/images/placeholders/hero.svg',
+} = Astro.props;
+
+const pageTitle = `${title} | [Company Name Placeholder]`;
+
+// No production domain exists yet — this is an explicit placeholder.
+// TODO: replace with the real production domain once one is assigned.
+const SITE_URL_PLACEHOLDER = 'https://example-domain-placeholder.com';
+const canonicalUrl = `${SITE_URL_PLACEHOLDER}${Astro.url.pathname}`;
+const absoluteOgImage = `${SITE_URL_PLACEHOLDER}${ogImage}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--
+      Scroll-reveal animation foundation: runs synchronously, before the
+      page paints, so animations.css's hidden initial states never cause
+      a flash of hidden content. Deliberately tiny, inline, and
+      dependency-free (is:inline so Astro leaves it untouched).
+
+      Adds "js-anim-ready" to <html> ONLY when JS is enabled AND the
+      visitor doesn't prefer reduced motion. If this script never runs
+      (JS disabled/blocked) the class is never added, so nothing in
+      animations.css ever hides anything — content just renders normally.
+
+      Same call also adds "js-loader-active", which is what makes the
+      page-loader overlay below visible at all (see global.css, section
+      17 "Page Loader"). Same reasoning applies: no JS or reduced motion
+      means the overlay's default CSS state (display: none) just stands,
+      so the page shows immediately with no loader and nothing to get
+      stuck behind.
+    -->
+    <script is:inline>
+      (function () {
+        try {
+          var reduceMotion = window.matchMedia(
+            '(prefers-reduced-motion: reduce)'
+          ).matches;
+          if (!reduceMotion) {
+            document.documentElement.classList.add('js-anim-ready', 'js-loader-active');
+          }
+        } catch (e) {
+          // matchMedia unsupported or blocked: fail safe by not adding
+          // either class, so content stays visible with no overlay.
+        }
+      })();
+    </script>
+
+    <!--
+      Referrer-Policy: safe to set here since it needs no knowledge of the
+      final domain/host. Other security headers (Content-Security-Policy,
+      X-Content-Type-Options, Permissions-Policy) are response-header-only
+      and are documented as a deployment requirement instead — see
+      CLAUDE.md / the Phase 6 report.
+    -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+
+    <!-- Canonical URL placeholder — domain not yet assigned. -->
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph / social preview placeholders — to be finalized with
+         real content and photography. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={absoluteOgImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body>
+    <!--
+      Initial page-load overlay. Hidden by default (see global.css,
+      section 17); only shown when the inline script above added
+      "js-loader-active" to <html>. src/scripts/page-loader.js fades it
+      out once the page is ready. aria-hidden because it's purely
+      decorative chrome with no content a screen reader needs — the
+      skip-link above it (z-index 1000 vs. this overlay's 998) still
+      reaches keyboard/AT users immediately regardless.
+    -->
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <span class="page-loader__spinner"></span>
+    </div>
+
+    <!--
+      Invisible marker used to detect "meaningful scrolling" for the
+      back-to-top button below, via IntersectionObserver rather than a
+      scroll event listener (src/scripts/back-to-top.js) — the same
+      no-scroll-listener approach src/scripts/scroll-reveal.js already
+      uses elsewhere on this site. Positioned a fixed distance down the
+      page; once it scrolls out of view, the button appears.
+    -->
+    <div id="scroll-sentinel" class="scroll-sentinel" aria-hidden="true"></div>
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <Header />
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <div class="floating-actions" aria-label="Quick contact actions">
+      <CallButton />
+      <WhatsAppButton />
+    </div>
+
+    <!--
+      Floating back-to-top control. Kept out of `.floating-actions`
+      (bottom-right, shared with Call/WhatsApp) and given its own
+      bottom-left position instead, so it can never sit over — or, by
+      joining that flex stack, shift — those buttons when it fades in.
+      Hidden by default here (opacity/scale/pointer-events, see
+      global.css "Back to Top" section) and also taken out of the tab
+      order (tabindex="-1", aria-hidden="true") until
+      src/scripts/back-to-top.js shows it, so it can never be silently
+      focused while invisible.
+    -->
+    <button
+      type="button"
+      id="back-to-top"
+      class="back-to-top"
+      aria-label="Back to top"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </button>
+
+    <script>
+      // Scroll-reveal animation engine (IntersectionObserver-driven).
+      // See src/scripts/scroll-reveal.js for the full implementation.
+      import '../scripts/scroll-reveal.js';
+      // Hero mouse-parallax (desktop-with-a-mouse only). No-ops on any
+      // page without an image-bearing hero (`.hero__inner`) — see
+      // src/scripts/hero-parallax.js for the full implementation.
+      import '../scripts/hero-parallax.js';
+      // Home hero product carousel (autoplay, arrows, dots, swipe). No-
+      // ops on any page without a `[data-hero-carousel]` element — see
+      // src/scripts/hero-carousel.js for the full implementation.
+      import '../scripts/hero-carousel.js';
+      // Product-preview image-swap crossfade. No-ops on any page without
+      // a `.product-preview` section — see
+      // src/scripts/product-preview.js for the full implementation.
+      import '../scripts/product-preview.js';
+      // Fades out the initial page-load overlay once the page is ready.
+      // See src/scripts/page-loader.js for the full implementation.
+      import '../scripts/page-loader.js';
+      // Shows/hides the floating back-to-top button and handles its
+      // smooth-scroll-to-top click. See src/scripts/back-to-top.js.
+      import '../scripts/back-to-top.js';
+      // Mobile footer accordion (collapse/expand + inert gating). See
+      // src/scripts/footer-accordion.js for the full implementation.
+      import '../scripts/footer-accordion.js';
+    </script>
+  </body>
+</html>
